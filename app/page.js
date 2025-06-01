@@ -5,15 +5,12 @@ import { io } from "socket.io-client";
 
 export default function Home() {
   const textAreaRef = useRef(null)
-  const [value, setValue] = useState("")
   const [cursor, setCursor] = useState(0)
-  const [user, setUser] = useState({}) 
-  const valueRef = useRef("")
   const socketRef = useRef(null)
   console.log(cursor)
 
   useEffect(() => {
-    const socket = io('https://localhost:3000/')
+    const socket = io('https://text-editor-backend-nmie.onrender.com/')
     socketRef.current = socket
     socketRef.current.on('cursor-moved',(obj)=>{
       if(obj.operation==="add")

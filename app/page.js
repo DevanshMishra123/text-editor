@@ -18,16 +18,16 @@ export default function Home() {
       else
         textAreaRef.current.value = textAreaRef.current.value.slice(0, obj.cursor) + textAreaRef.current.value.slice(obj.cursor + 1);
     })
-  })
+  },[])
 
   const handleChange = (e) => {
     textAreaRef.current.value = e.target.value
     const pos = textAreaRef.current.selectionStart;
     console.log(pos)
     if(cursor<pos)
-      socket.emit('cursor-moved', {cursor: pos, text: textAreaRef.current.value[pos], operation: "add"})
+      socketRef.current.emit('cursor-moved', {cursor: pos, text: textAreaRef.current.value[pos], operation: "add"})
     else
-      socket.emit('cursor-moved', {cursor: pos, text: textAreaRef.current.value[pos], operation: "delete"})
+      socketRef.current.emit('cursor-moved', {cursor: pos, text: textAreaRef.current.value[pos], operation: "delete"})
     setCursor(pos)
   }
 

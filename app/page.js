@@ -37,9 +37,9 @@ export default function Home() {
     const pos = textAreaRef.current.selectionStart;
     console.log(pos)
     if(cursor<pos)
-      socketRef.current.emit('cursor-moved', {cursor: pos, text: textAreaRef.current.value[pos], operation: "add"})
+      socketRef.current.emit('cursor-moved', {cursor: pos, text: textAreaRef.current.value[cursor], operation: "add"})
     else
-      socketRef.current.emit('cursor-moved', {cursor: pos, text: textAreaRef.current.value[pos], operation: "delete"})
+      socketRef.current.emit('cursor-moved', {cursor: pos, text: textAreaRef.current.value[cursor], operation: "delete"})
     setCursor(pos)
   }
 

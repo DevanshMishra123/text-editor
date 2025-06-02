@@ -6,6 +6,7 @@ import { io } from "socket.io-client";
 export default function Home() {
   const textAreaRef = useRef(null)
   const [cursor, setCursor] = useState(0)
+  const cursorRef = useRef(0)
   const socketRef = useRef(null)
   console.log(cursor)
 
@@ -36,10 +37,11 @@ export default function Home() {
     textAreaRef.current.value = e.target.value
     const pos = textAreaRef.current.selectionStart;
     console.log(pos)
-    if(cursor<pos)
-      socketRef.current.emit('cursor-moved', {cursor: pos, text: textAreaRef.current.value[cursor], operation: "add"})
+    if(cursorRef.current<pos)
+      socketRef.current.emit('cursor-moved', {cursor: pos, text: textAreaRef.current.value[cursorRef.current], operation: "add"})
     else
-      socketRef.current.emit('cursor-moved', {cursor: pos, text: textAreaRef.current.value[cursor], operation: "delete"})
+      socketRef.current.emit('cursor-moved', {cursor: pos, text: textAreaRef.current.value[cursorRef.current], operation: "delete"})
+    cursorRef.current = pos
     setCursor(pos)
   }
 

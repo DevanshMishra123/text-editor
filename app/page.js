@@ -10,14 +10,26 @@ export default function Home() {
   console.log(cursor)
 
   useEffect(() => {
-    const socket = io('https://text-editor-backend-nmie.onrender.com/')
-    socketRef.current = socket
+    const socket = io('https://text-editor-backend-nmie.onrender.com/');
+    socketRef.current = socket;
+
+    socket.on('connect', () => {
+      console.log('Connected to server:', socket.id);
+    });
+
+    socket.on('connect_error', (err) => {
+      console.error('Connection error:', err.message);
+    });
     socketRef.current.on('cursor-moved',(obj)=>{
       if(obj.operation==="add")
         textAreaRef.current.value = textAreaRef.current.value.slice(0, obj.cursor) + obj.text + textAreaRef.current.value.slice(obj.cursor)
       else
         textAreaRef.current.value = textAreaRef.current.value.slice(0, obj.cursor) + textAreaRef.current.value.slice(obj.cursor + 1);
     })
+
+    return () => {
+      socket.disconnect();
+    };
   },[])
 
   const handleChange = (e) => {

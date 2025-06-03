@@ -42,7 +42,6 @@ export default function Home() {
     else
       socketRef.current.emit('cursor-moved', {cursor: pos, text: textAreaRef.current.value[cursorRef.current], operation: "delete"})
     cursorRef.current = pos
-    setCursor(pos)
   }
 
   const handleClick = () => {

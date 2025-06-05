@@ -25,6 +25,7 @@ export default function Home() {
     socketRef.current.on("cursor-moved", (obj) => {
       const text = textAreaRef.current.value;
       console.log("from receiver side",textAreaRef.current.selectionStart)
+      console.log("from receiver side text is:", obj.text)
       if (obj.operation === "add") {
         textAreaRef.current.value = text.slice(0, obj.cursor) + obj.text + text.slice(obj.cursor);
       } else if (obj.operation === "delete") {

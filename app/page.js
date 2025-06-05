@@ -22,19 +22,31 @@ export default function Home() {
     socket.on("connect_error", (err) => {
       console.error("Connection error:", err.message);
     });
-    socketRef.current.on("cursor-moved", (obj) => {
-      const text = textAreaRef.current.value;
-      console.log("from receiver side",textAreaRef.current.selectionStart)
-      console.log("from receiver side text is:", obj.text)
-      console.log("from receiver side cursor position is:", obj.cursor)
-      if (obj.operation === "add") {
-        textAreaRef.current.value = text.slice(0, obj.cursor) + obj.text + text.slice(obj.cursor);
-        textAreaRef.current.selectionStart+=obj.text.length
-      } else if (obj.operation === "delete") {
-        textAreaRef.current.value = text.slice(0, obj.cursor) + text.slice(obj.cursor + obj.text.length);
-        textAreaRef.current.selectionStart-=obj.text.length
+
+     socket.on("init", (fullText) => {
+      if (textAreaRef.current) {
+        textAreaRef.current.value = fullText;
+        prevTextRef.current = fullText;
       }
     });
+
+    socket.on("cursor-moved", (obj) => {
+      const text = textAreaRef.current.value;
+
+      if (obj.operation === "add") {
+        textAreaRef.current.value = text.slice(0, obj.cursor) + obj.text + text.slice(obj.cursor);
+        const newPos = obj.cursor + obj.text.length;
+        textAreaRef.current.selectionStart = newPos;
+        textAreaRef.current.selectionEnd = newPos;
+      } else if (obj.operation === "delete") {
+        textAreaRef.current.value = text.slice(0, obj.cursor) + text.slice(obj.cursor + obj.text.length);
+        textAreaRef.current.selectionStart = obj.cursor;
+        textAreaRef.current.selectionEnd = obj.cursor;
+      }
+
+      prevTextRef.current = textAreaRef.current.value;
+    });
+    
     return () => {
       socket.disconnect();
     };

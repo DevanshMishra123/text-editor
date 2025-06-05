@@ -29,8 +29,10 @@ export default function Home() {
       console.log("from receiver side cursor position is:", obj.cursor)
       if (obj.operation === "add") {
         textAreaRef.current.value = text.slice(0, obj.cursor) + obj.text + text.slice(obj.cursor);
+        textAreaRef.current.selectionStart+=obj.length
       } else if (obj.operation === "delete") {
         textAreaRef.current.value = text.slice(0, obj.cursor) + text.slice(obj.cursor + obj.text.length);
+        textAreaRef.current.selectionStart-=obj.text.length
       }
     });
     return () => {

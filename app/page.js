@@ -24,7 +24,7 @@ export default function Home() {
     });
     socketRef.current.on("cursor-moved", (obj) => {
       const text = textAreaRef.current.value;
-      console.log(textAreaRef.current.selectionStart)
+      console.log("from receiver side",textAreaRef.current.selectionStart)
       if (obj.operation === "add") {
         textAreaRef.current.value = text.slice(0, obj.cursor) + obj.text + text.slice(obj.cursor);
       } else if (obj.operation === "delete") {
@@ -40,7 +40,7 @@ export default function Home() {
       const newText = e.target.value;
       const oldText = prevTextRef.current;
       const pos = e.target.selectionStart;
-
+      console.log("from my side",textAreaRef.current.selectionStart)
       const diffLength = newText.length - oldText.length;
 
       if (diffLength > 0) {

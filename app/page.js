@@ -26,6 +26,7 @@ export default function Home() {
       const text = textAreaRef.current.value;
       console.log("from receiver side",textAreaRef.current.selectionStart)
       console.log("from receiver side text is:", obj.text)
+      console.log("from receiver side cursor position is:", obj.cursor)
       if (obj.operation === "add") {
         textAreaRef.current.value = text.slice(0, obj.cursor) + obj.text + text.slice(obj.cursor);
       } else if (obj.operation === "delete") {

@@ -23,6 +23,13 @@ export default function Home() {
       console.error("Connection error:", err.message);
     });
 
+    socket.on("init", (fullText) => {
+      if (textAreaRef.current) {
+        textAreaRef.current.value = fullText;
+        prevTextRef.current = fullText;
+      }
+    });
+
     socket.on("cursor-moved", (obj) => {
       const text = textAreaRef.current.value;
 
@@ -91,12 +98,4 @@ textAreaRef.current.value = e.target.value
     else
       socketRef.current.emit('cursor-moved', {cursor: pos, text: textAreaRef.current.value[cursorRef.current], operation: "delete"})
     cursorRef.current = pos
-
-    socket.on("init", (fullText) => {
-      if (textAreaRef.current) {
-        textAreaRef.current.value = fullText;
-        prevTextRef.current = fullText;
-      }
-    });
-
 */

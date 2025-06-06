@@ -65,6 +65,7 @@ export default function Editor() {
     });
 
     socket.on("cursor-moved", (obj) => {
+      console.log("Received cursor-moved:", obj);
       const text = Node.string({children: valueRef.current})
 
       if (obj.operation === "add") {

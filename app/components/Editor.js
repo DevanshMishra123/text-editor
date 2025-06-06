@@ -7,26 +7,40 @@ import { createEditor, Transforms, Node } from 'slate'
 import { Slate, Editable, withReact } from 'slate-react'
 import { withHistory } from 'slate-history'
 
-export default function Home() {
+const initialValue = [
+  {
+    type: "paragraph",
+    children: [{ text: "Hello Slate!" }],
+  },
+];
+
+export default function Editor() {
   const [editor] = useState(() => withHistory(withReact(createEditor())))
-  const [value, setValue] = useState([
-    {
-      type: 'paragraph',
-      children: [{ text: 'Hello Slate!' }],
-    },
-  ]);
+  const [value, setValue] = useState(initialValue);
   const [cursor, setCursor] = useState(0);
   const cursorRef = useRef(0);
-  const valueRef = useRef("")
+  const valueRef = useRef(initialValue)
   const socketRef = useRef(null);
   const prevTextRef = useRef(Node.string({ children: value }));
   console.log(cursor);
 
   useEffect(() => {
+    console.log("DEBUG: value", value);
+    if (!Array.isArray(value)) {
+        console.error("❌ value is not an array", value);
+    }
     valueRef.current = value
   },[value])
 
   function deserializePlainText(text) {
+    if (!text) {
+        return [
+        {
+            type: 'paragraph',
+            children: [{ text: '' }],
+        },
+        ];
+    }
     return text.split('\n').map(line => ({
       type: 'paragraph',
       children: [{ text: line }],
@@ -126,10 +140,14 @@ export default function Home() {
     setCursor(pos)
   };
 
-  return (
-    <Slate editor={editor} value={value} onChange={handleChange}>
+  if (!Array.isArray(value)) {
+    return <p>Loading editor...</p>; 
+  }
+
+  return (  
+    value && (<Slate editor={editor} initialValue={initialValue} value={value} onChange={handleChange}>
         <Editable renderElement={renderElement} onClick={handleClick} placeholder="Enter some text..." />
-    </Slate>
+    </Slate>)
   );
 }
 /*

@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useState, useRef, useEffect, useReducer, useCallback } from "react";
 import { io } from "socket.io-client";
 import { createEditor, Transforms, Node } from 'slate'
-import { Slate, Editable, withReact } from 'slate-react'
+import { Slate, Editable, withReact, ReactEditor } from 'slate-react'
 import { withHistory } from 'slate-history'
 
 const initialValue = [
@@ -68,27 +68,21 @@ export default function Editor() {
       console.log("Received cursor-moved:", obj);
       const text = Node.string({children: valueRef.current})
 
+      ReactEditor.focus(editor);
+
       if (obj.operation === "add") {
-        const newValue = text.slice(0, obj.cursor) + obj.text + text.slice(obj.cursor);
-        const newSlateValue = deserializePlainText(newValue); 
-        setValue(newSlateValue);
-        const newOffset = obj.cursor + obj.text.length;
-
         Transforms.select(editor, {
-          anchor: { path: [0, 0], offset: newOffset },
-          focus: { path: [0, 0], offset: newOffset },
+        anchor: { path: [0, 0], offset: obj.cursor },
+        focus: { path: [0, 0], offset: obj.cursor },
         });
-
+        Transforms.insertText(editor, obj.text);
       } else if (obj.operation === "delete") {
-        const newValue = text.slice(0, obj.cursor) + text.slice(obj.cursor + obj.text.length);
-        const newSlateValue = deserializePlainText(newValue); 
-        setValue(newSlateValue);
-
         Transforms.select(editor, {
-          anchor: { path: [0, 0], offset: obj.cursor },
-          focus: { path: [0, 0], offset: obj.cursor },
+        anchor: { path: [0, 0], offset: obj.cursor },
+        focus: { path: [0, 0], offset: obj.cursor + obj.text.length },
         });
-      }  
+        Transforms.delete(editor);
+      }
       prevTextRef.current = text;
     });
 
@@ -214,4 +208,29 @@ socket.on("cursor-moved", (obj) => {
 
       prevTextRef.current = textAreaRef.current.value;
     });
+*/
+/*
+if (obj.operation === "add") {
+        const newValue = text.slice(0, obj.cursor) + obj.text + text.slice(obj.cursor);
+        const newSlateValue = deserializePlainText(newValue); 
+        console.log("deserialized text is:", newSlateValue)
+        setValue(newSlateValue);
+        const newOffset = obj.cursor + obj.text.length;
+
+        Transforms.select(editor, {
+          anchor: { path: [0, 0], offset: newOffset },
+          focus: { path: [0, 0], offset: newOffset },
+        });
+
+      } else if (obj.operation === "delete") {
+        const newValue = text.slice(0, obj.cursor) + text.slice(obj.cursor + obj.text.length);
+        const newSlateValue = deserializePlainText(newValue); 
+        console.log("deserialized text is:", newSlateValue)
+        setValue(newSlateValue);
+
+        Transforms.select(editor, {
+          anchor: { path: [0, 0], offset: obj.cursor },
+          focus: { path: [0, 0], offset: obj.cursor },
+        });
+      }  
 */

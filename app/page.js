@@ -1,15 +1,37 @@
 "use client";
+import React from 'react'
 import Image from "next/image";
-import { useState, useRef, useEffect, useReducer } from "react";
+import { useState, useRef, useEffect, useReducer, useCallback } from "react";
 import { io } from "socket.io-client";
+import { createEditor, Transforms, Node } from 'slate'
+import { Slate, Editable, withReact } from 'slate-react'
+import { withHistory } from 'slate-history'
 
 export default function Home() {
-  const textAreaRef = useRef(null);
+  const [editor] = useState(() => withHistory(withReact(createEditor())))
+  const [value, setValue] = useState([
+    {
+      type: 'paragraph',
+      children: [{ text: 'Hello Slate!' }],
+    },
+  ]);
   const [cursor, setCursor] = useState(0);
   const cursorRef = useRef(0);
+  const valueRef = useRef("")
   const socketRef = useRef(null);
-  const prevTextRef = useRef("");
+  const prevTextRef = useRef(Node.string({ children: value }));
   console.log(cursor);
+
+  useEffect(() => {
+    valueRef.current = value
+  },[value])
+
+  function deserializePlainText(text) {
+    return text.split('\n').map(line => ({
+      type: 'paragraph',
+      children: [{ text: line }],
+    }));
+  }
 
   useEffect(() => {
     const socket = io("https://text-editor-backend-nmie.onrender.com/");
@@ -24,27 +46,35 @@ export default function Home() {
     });
 
     socket.on("init", (fullText) => {
-      if (textAreaRef.current) {
-        textAreaRef.current.value = fullText;
-        prevTextRef.current = fullText;
-      }
+      const newText = deserializePlainText(fullText)
+      setValue(newText)
     });
 
     socket.on("cursor-moved", (obj) => {
-      const text = textAreaRef.current.value;
+      const text = Node.string({children: valueRef.current})
 
       if (obj.operation === "add") {
-        textAreaRef.current.value = text.slice(0, obj.cursor) + obj.text + text.slice(obj.cursor);
-        const newPos = obj.cursor + obj.text.length;
-        textAreaRef.current.selectionStart = newPos;
-        textAreaRef.current.selectionEnd = newPos;
-      } else if (obj.operation === "delete") {
-        textAreaRef.current.value = text.slice(0, obj.cursor) + text.slice(obj.cursor + obj.text.length);
-        textAreaRef.current.selectionStart = obj.cursor;
-        textAreaRef.current.selectionEnd = obj.cursor;
-      }
+        const newValue = text.slice(0, obj.cursor) + obj.text + text.slice(obj.cursor);
+        const newSlateValue = deserializePlainText(newValue); 
+        setValue(newSlateValue);
+        const newOffset = obj.cursor + obj.text.length;
 
-      prevTextRef.current = textAreaRef.current.value;
+        Transforms.select(editor, {
+          anchor: { path: [0, 0], offset: newOffset },
+          focus: { path: [0, 0], offset: newOffset },
+        });
+
+      } else if (obj.operation === "delete") {
+        const newValue = text.slice(0, obj.cursor) + text.slice(obj.cursor + obj.text.length);
+        const newSlateValue = deserializePlainText(newValue); 
+        setValue(newSlateValue);
+
+        Transforms.select(editor, {
+          anchor: { path: [0, 0], offset: obj.cursor },
+          focus: { path: [0, 0], offset: obj.cursor },
+        });
+      }  
+      prevTextRef.current = text;
     });
 
     return () => {
@@ -52,7 +82,70 @@ export default function Home() {
     };
   }, []);
 
-  const handleChange = (e) => {
+  const renderElement = useCallback(props => {
+    switch (props.element.type) {
+      case 'heading':
+        return <h1 {...props.attributes}>{props.children}</h1>;
+      case 'code':
+        return <pre {...props.attributes}><code>{props.children}</code></pre>;
+      default:
+        return <p {...props.attributes}>{props.children}</p>;
+    }
+  }, []);
+
+  const handleChange = (newValue) => {
+    setValue(newValue);
+    const newText = Node.string({ children: newValue });
+    const oldText = prevTextRef.current;
+    const { selection } = editor;
+    const pos = selection && selection.anchor ? selection.anchor.offset : 0;
+    const diffLength = newText.length - oldText.length;
+
+    if (diffLength > 0) {
+      const addedText = newText.slice(pos - diffLength, pos);
+      socketRef.current?.emit("cursor-moved", {
+        cursor: pos - diffLength,
+        text: addedText,
+        operation: "add",
+      });
+    } else if (diffLength < 0) {
+      socketRef.current?.emit("cursor-moved", {
+        cursor: pos,
+        text: oldText.slice(pos, pos - diffLength),
+        operation: "delete",
+      });
+    }
+
+    prevTextRef.current = newText;
+    cursorRef.current = pos;
+  };
+
+  const handleClick = () => {
+    const { selection } = editor;
+    const pos = selection && selection.anchor ? selection.anchor.offset : 0;
+    setCursor(pos)
+  };
+
+  return (
+    <div className="flex">
+      <Slate editor={editor} value={value} onChange={handleChange}>
+        <Editable renderElement={renderElement} onClick={handleClick} placeholder="Enter some text..." />
+      </Slate>
+    </div>
+  );
+}
+/*
+textAreaRef.current.value = e.target.value
+    const pos = textAreaRef.current.selectionStart;
+    console.log(pos)
+    if(cursorRef.current<pos)
+      socketRef.current.emit('cursor-moved', {cursor: pos, text: textAreaRef.current.value[cursorRef.current], operation: "add"})
+    else
+      socketRef.current.emit('cursor-moved', {cursor: pos, text: textAreaRef.current.value[cursorRef.current], operation: "delete"})
+    cursorRef.current = pos
+*/
+/*
+const handleChange = (e) => {
       const newText = e.target.value;
       const oldText = prevTextRef.current;
       const pos = e.target.selectionStart;
@@ -76,26 +169,32 @@ export default function Home() {
       prevTextRef.current = newText;
       cursorRef.current = pos;
   };
-
-  const handleClick = () => {
+*/
+/*
+const handleClick = () => {
     const pos = textAreaRef.current.selectionStart;
     console.log(pos);
     setCursor(pos);
   };
-
-  return (
-    <div className="flex">
-      <textarea ref={textAreaRef} onChange={handleChange} onClick={handleClick} className="border border-b-black w-[75vw] h-[85vh] p-12" name="editor"/>
-    </div>
-  );
-}
+*/
 /*
-textAreaRef.current.value = e.target.value
-    const pos = textAreaRef.current.selectionStart;
-    console.log(pos)
-    if(cursorRef.current<pos)
-      socketRef.current.emit('cursor-moved', {cursor: pos, text: textAreaRef.current.value[cursorRef.current], operation: "add"})
-    else
-      socketRef.current.emit('cursor-moved', {cursor: pos, text: textAreaRef.current.value[cursorRef.current], operation: "delete"})
-    cursorRef.current = pos
+<textarea ref={textAreaRef} onChange={handleChange} onClick={handleClick} className="border border-b-black w-[75vw] h-[85vh] p-12" name="editor"/>
+*/
+/*
+socket.on("cursor-moved", (obj) => {
+      const text = textAreaRef.current.value
+
+      if (obj.operation === "add") {
+        textAreaRef.current.value = text.slice(0, obj.cursor) + obj.text + text.slice(obj.cursor);
+        const newPos = obj.cursor + obj.text.length;
+        textAreaRef.current.selectionStart = newPos;
+        textAreaRef.current.selectionEnd = newPos;
+      } else if (obj.operation === "delete") {
+        textAreaRef.current.value = text.slice(0, obj.cursor) + text.slice(obj.cursor + obj.text.length);
+        textAreaRef.current.selectionStart = obj.cursor;
+        textAreaRef.current.selectionEnd = obj.cursor;
+      }
+
+      prevTextRef.current = textAreaRef.current.value;
+    });
 */

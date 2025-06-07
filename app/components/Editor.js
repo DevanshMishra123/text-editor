@@ -47,8 +47,8 @@ export default function Editor() {
         editor.insertText(text);
       } else if (operation === "delete") {
         editor.selection = {
-          anchor: { path: [0, 0], offset: cursor },
-          focus: { path: [0, 0], offset: cursor + text.length },
+          anchor: { path: [0, 0], offset: cursor - text.length },
+          focus: { path: [0, 0], offset: cursor },
         };
         editor.deleteFragment();
       }

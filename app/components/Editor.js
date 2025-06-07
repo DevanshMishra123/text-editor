@@ -171,7 +171,7 @@ export default function Editor() {
 
   return (  
     value && (<Slate editor={editor} initialValue={initialValue} value={value} onChange={handleChange}>
-        <Editable renderElement={renderElement} onClick={handleClick} onBeforeInput={handleBeforeInput} onKeyDown={handleKeyDown} placeholder="Enter some text..." />
+        <Editable renderElement={renderElement} onClick={handleClick} onDOMBeforeInput={handleBeforeInput} onKeyDown={handleKeyDown} placeholder="Enter some text..." />
     </Slate>)
   );
 }

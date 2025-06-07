@@ -72,19 +72,21 @@ export default function Editor() {
       ReactEditor.focus(editor);
       isRemoteChange.current = true
 
-      if (obj.operation === "add") {
-        Transforms.select(editor, {
-        anchor: { path: [0, 0], offset: obj.cursor },
-        focus: { path: [0, 0], offset: obj.cursor },
-        });
-        Transforms.insertText(editor, obj.text);
-      } else if (obj.operation === "delete") {
-        Transforms.select(editor, {
-        anchor: { path: [0, 0], offset: obj.cursor },
-        focus: { path: [0, 0], offset: obj.cursor + obj.text.length },
-        });
-        Transforms.delete(editor);
-      }
+      Transforms.withoutNormalizing(editor, () => {
+        if (obj.operation === "add") {
+          Transforms.select(editor, {
+            anchor: { path: [0, 0], offset: obj.cursor },
+            focus: { path: [0, 0], offset: obj.cursor },
+          });
+          Transforms.insertText(editor, obj.text);
+        } else if (obj.operation === "delete") {
+          Transforms.select(editor, {
+            anchor: { path: [0, 0], offset: obj.cursor },
+            focus: { path: [0, 0], offset: obj.cursor + obj.text.length },
+          });
+          Transforms.delete(editor);
+        }
+      });
       prevTextRef.current = text;
       setTimeout(() => {
         isRemoteChange.current = false; 
@@ -110,34 +112,51 @@ export default function Editor() {
   const handleChange = (newValue) => {
     setValue(newValue);
     const newText = Node.string({ children: newValue });
-    const oldText = prevTextRef.current;
-    const { selection } = editor;
-    const pos = selection && selection.anchor ? selection.anchor.offset : 0;
-    const diffLength = newText.length - oldText.length;
 
     if (isRemoteChange.current) {
       prevTextRef.current = newText;
-      cursorRef.current = pos;
       return;
     }
 
-    if (diffLength > 0) {
-      const addedText = newText.slice(pos - diffLength, pos);
+    prevTextRef.current = newText;
+  };
+
+  const handleBeforeInput = (event) => {
+    const { selection } = editor;
+    if (!selection || !event.data) return;
+
+    const pos = selection.anchor.offset;
+    socketRef.current?.emit("cursor-moved", {
+      cursor: pos,
+      text: event.data,
+      operation: "add",
+    });
+  };
+
+  const handleKeyDown = (event) => {
+    const { selection } = editor;
+    if (!selection) return;
+
+    const pos = selection.anchor.offset;
+    const currentText = Node.string(editor);
+
+    if (event.key === "Backspace" && pos > 0) {
+      const deletedChar = currentText[pos - 1];
       socketRef.current?.emit("cursor-moved", {
-        cursor: pos - diffLength,
-        text: addedText,
-        operation: "add",
-      });
-    } else if (diffLength < 0) {
-      socketRef.current?.emit("cursor-moved", {
-        cursor: pos,
-        text: oldText.slice(pos, pos - diffLength),
+        cursor: pos - 1,
+        text: deletedChar,
         operation: "delete",
       });
     }
 
-    prevTextRef.current = newText;
-    cursorRef.current = pos;
+    if (event.key === "Delete" && pos < currentText.length) {
+      const deletedChar = currentText[pos];
+      socketRef.current?.emit("cursor-moved", {
+        cursor: pos,
+        text: deletedChar,
+        operation: "delete",
+      });
+    }
   };
 
   const handleClick = () => {
@@ -145,14 +164,14 @@ export default function Editor() {
     const pos = selection && selection.anchor ? selection.anchor.offset : 0;
     setCursor(pos)
   };
-
+  
   if (!Array.isArray(value)) {
     return <p>Loading editor...</p>; 
   }
 
   return (  
     value && (<Slate editor={editor} initialValue={initialValue} value={value} onChange={handleChange}>
-        <Editable renderElement={renderElement} onClick={handleClick} placeholder="Enter some text..." />
+        <Editable renderElement={renderElement} onClick={handleClick} onBeforeInput={handleBeforeInput} onKeyDown={handleKeyDown} placeholder="Enter some text..." />
     </Slate>)
   );
 }
@@ -244,4 +263,44 @@ if (obj.operation === "add") {
           focus: { path: [0, 0], offset: obj.cursor },
         });
       }  
+*/
+/*
+const handleChange = (newValue) => {
+    setValue(newValue);
+    const newText = Node.string({ children: newValue });
+    const oldText = prevTextRef.current;
+    const { selection } = editor;
+    const pos = selection && selection.anchor ? selection.anchor.offset : 0;
+    const diffLength = newText.length - oldText.length;
+
+    if (isRemoteChange.current) {
+      prevTextRef.current = newText;
+      cursorRef.current = pos;
+      return;
+    }
+
+    if (diffLength > 0) {
+      const addedText = newText.slice(pos - diffLength, pos);
+      socketRef.current?.emit("cursor-moved", {
+        cursor: pos - diffLength,
+        text: addedText,
+        operation: "add",
+      });
+    } else if (diffLength < 0) {
+      socketRef.current?.emit("cursor-moved", {
+        cursor: pos,
+        text: oldText.slice(pos, pos - diffLength),
+        operation: "delete",
+      });
+    }
+
+    prevTextRef.current = newText;
+    cursorRef.current = pos;
+  };
+
+  const handleClick = () => {
+    const { selection } = editor;
+    const pos = selection && selection.anchor ? selection.anchor.offset : 0;
+    setCursor(pos)
+  };
 */

@@ -21,6 +21,7 @@ export default function Editor() {
   const cursorRef = useRef(0);
   const valueRef = useRef(initialValue)
   const socketRef = useRef(null);
+  const isRemoteChange = useRef(false);
   const prevTextRef = useRef(Node.string({ children: value }));
   console.log(cursor);
 
@@ -69,6 +70,7 @@ export default function Editor() {
       const text = Node.string({children: valueRef.current})
 
       ReactEditor.focus(editor);
+      isRemoteChange.current = true
 
       if (obj.operation === "add") {
         Transforms.select(editor, {
@@ -84,6 +86,9 @@ export default function Editor() {
         Transforms.delete(editor);
       }
       prevTextRef.current = text;
+      setTimeout(() => {
+        isRemoteChange.current = false; 
+      }, 0);
     });
 
     return () => {
@@ -109,6 +114,12 @@ export default function Editor() {
     const { selection } = editor;
     const pos = selection && selection.anchor ? selection.anchor.offset : 0;
     const diffLength = newText.length - oldText.length;
+
+    if (isRemoteChange.current) {
+      prevTextRef.current = newText;
+      cursorRef.current = pos;
+      return;
+    }
 
     if (diffLength > 0) {
       const addedText = newText.slice(pos - diffLength, pos);

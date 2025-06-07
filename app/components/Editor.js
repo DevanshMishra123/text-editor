@@ -85,7 +85,7 @@ export default function Editor() {
   }
 
   return (
-    <Slate editor={editor} value={value} onChange={setValue}>
+    <Slate editor={editor} initialValue={initialValue} value={value} onChange={setValue}>
       <Editable placeholder="Start typing..." />
     </Slate>
   );

@@ -1,4 +1,98 @@
 "use client";
+import React, { useEffect, useRef, useState } from "react";
+import { createEditor, Node, Text, Operation } from "slate";
+import { Slate, Editable, withReact } from "slate-react";
+import { withHistory } from "slate-history";
+import { io } from "socket.io-client";
+
+const initialValue = [
+  {
+    type: "paragraph",
+    children: [{ text: "Hello Slate!" }],
+  },
+];
+
+export default function Editor() {
+  const socketRef = useRef(null);
+  const isRemote = useRef(false);
+  const [value, setValue] = useState(initialValue);
+
+  const editor = useRef(
+    withHistory(
+      withReact(
+        withSocket(createEditor())
+      )
+    )
+  ).current;
+
+  // Connect to socket
+  useEffect(() => {
+    const socket = io("https://text-editor-backend-nmie.onrender.com/");
+    socketRef.current = socket;
+
+    socket.on("connect", () => {
+      console.log("✅ Connected to server:", socket.id);
+    });
+
+    socket.on("cursor-moved", (obj) => {
+      console.log("📩 Received from socket:", obj);
+      isRemote.current = true;
+
+      const { cursor, text, operation } = obj;
+      if (operation === "add") {
+        editor.selection = {
+          anchor: { path: [0, 0], offset: cursor },
+          focus: { path: [0, 0], offset: cursor },
+        };
+        editor.insertText(text);
+      } else if (operation === "delete") {
+        editor.selection = {
+          anchor: { path: [0, 0], offset: cursor },
+          focus: { path: [0, 0], offset: cursor + text.length },
+        };
+        editor.deleteFragment();
+      }
+
+      isRemote.current = false;
+    });
+
+    return () => socket.disconnect();
+  }, []);
+
+  function withSocket(editor) {
+    const { apply } = editor;
+
+    editor.apply = (op) => {
+      if (!isRemote.current && socketRef.current) {
+        if (op.type === "insert_text") {
+          socketRef.current.emit("cursor-moved", {
+            cursor: op.offset,
+            text: op.text,
+            operation: "add",
+          });
+        } else if (op.type === "remove_text") {
+          socketRef.current.emit("cursor-moved", {
+            cursor: op.offset,
+            text: op.text,
+            operation: "delete",
+          });
+        }
+      }
+      apply(op);
+    };
+
+    return editor;
+  }
+
+  return (
+    <Slate editor={editor} value={value} onChange={setValue}>
+      <Editable placeholder="Start typing..." />
+    </Slate>
+  );
+}
+
+/*
+"use client";
 import React from 'react'
 import Image from "next/image";
 import { useState, useRef, useEffect, useReducer, useCallback } from "react";
@@ -154,6 +248,7 @@ export default function Editor() {
     </Slate>)
   );
 }
+*/
 /*
 textAreaRef.current.value = e.target.value
     const pos = textAreaRef.current.selectionStart;

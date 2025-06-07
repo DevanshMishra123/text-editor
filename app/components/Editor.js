@@ -7,8 +7,12 @@ import { io } from "socket.io-client";
 
 const initialValue = [
   {
+    type: "heading",
+    children: [{ text: "This is a heading" }],
+  },
+  {
     type: "paragraph",
-    children: [{ text: "Hello Slate!" }],
+    children: [{ text: "And this is a paragraph." }],
   },
 ];
 
@@ -25,7 +29,6 @@ export default function Editor() {
     )
   ).current;
 
-  // Connect to socket
   useEffect(() => {
     const socket = io("https://text-editor-backend-nmie.onrender.com/");
     socketRef.current = socket;
@@ -38,17 +41,17 @@ export default function Editor() {
       console.log("📩 Received from socket:", obj);
       isRemote.current = true;
 
-      const { cursor, text, operation } = obj;
+      const { path, cursor, text, operation } = obj;
       if (operation === "add") {
         editor.selection = {
-          anchor: { path: [0, 0], offset: cursor },
-          focus: { path: [0, 0], offset: cursor },
+          anchor: { path, offset: cursor },
+          focus: { path, offset: cursor },
         };
         editor.insertText(text);
       } else if (operation === "delete") {
         editor.selection = {
-          anchor: { path: [0, 0], offset: cursor },
-          focus: { path: [0, 0], offset: cursor + text.length },
+          anchor: { path, offset: cursor },
+          focus: { path, offset: cursor + text.length },
         };
         editor.deleteFragment();
       }
@@ -59,22 +62,28 @@ export default function Editor() {
     return () => socket.disconnect();
   }, []);
 
+  const renderElement = useCallback((props) => {
+    const { element, attributes, children } = props;
+    switch (element.type) {
+      case "heading":
+        return <h2 {...attributes}>{children}</h2>;
+      case "paragraph":
+      default:
+        return <p {...attributes}>{children}</p>;
+    }
+  }, []);
+
   function withSocket(editor) {
     const { apply } = editor;
 
     editor.apply = (op) => {
       if (!isRemote.current && socketRef.current) {
-        if (op.type === "insert_text") {
+        if (op.type === "insert_text" || op.type === "remove_text") {
           socketRef.current.emit("cursor-moved", {
+            path: op.path,       
             cursor: op.offset,
             text: op.text,
-            operation: "add",
-          });
-        } else if (op.type === "remove_text") {
-          socketRef.current.emit("cursor-moved", {
-            cursor: op.offset,
-            text: op.text,
-            operation: "delete",
+            operation: op.type === "insert_text" ? "add" : "delete",
           });
         }
       }
@@ -86,7 +95,7 @@ export default function Editor() {
 
   return (
     <Slate editor={editor} initialValue={initialValue} value={value} onChange={setValue}>
-      <Editable placeholder="Start typing..." />
+      <Editable renderElement={renderElement} placeholder="Start typing..." />
     </Slate>
   );
 }

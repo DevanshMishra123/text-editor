@@ -16,7 +16,7 @@ const initialValue = [
   },
 ];
 
-export default function Editor() {
+export default function Edit() {
   const socketRef = useRef(null);
   const isRemote = useRef(false);
   const [value, setValue] = useState(initialValue);

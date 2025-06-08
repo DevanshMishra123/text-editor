@@ -61,18 +61,33 @@ export default function Edit() {
           focus: { path, offset: 0 },
         };
       } else if (operation === "splitNode") {
-        if (Path.isValid(editor, path)) {
-          Transforms.splitNodes(editor, { at: path, position, always: true, });
-        }
-        const newPath = Path.next(path);
-        setTimeout(() => {
-          Transforms.select(editor, {
-            anchor: { path: newPath, offset: 0 },
-            focus: { path: newPath, offset: 0 },
-          });
-        }, 0);
-      }
+          try {
+            if (Path.has(editor, path)) {
+              Transforms.select(editor, {
+                anchor: { path, offset: position },
+                focus: { path, offset: position },
+              });
 
+              Transforms.splitNodes(editor, {
+                at: path,
+                position,
+                match: n => Editor.isBlock(editor, n),
+              });
+
+              const newPath = Path.next(path);
+              setTimeout(() => {
+                Transforms.select(editor, {
+                  anchor: { path: newPath, offset: 0 },
+                  focus: { path: newPath, offset: 0 },
+                });
+              }, 0);
+            } else {
+              console.warn("❌ Invalid path for splitNode:", path);
+            }
+          } catch (err) {
+            console.error("❌ Error applying splitNode remotely:", err);
+          }
+      }
       isRemote.current = false;
     });
 

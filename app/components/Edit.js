@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useRef, useState, useCallback } from "react";
-import { createEditor, Node, Text, Operation, Transforms, Editor } from "slate";
+import { createEditor, Node, Text, Operation, Transforms, Editor, Path } from "slate";
 import { Slate, Editable, withReact } from "slate-react";
 import { withHistory } from "slate-history";
 import { io } from "socket.io-client";
@@ -62,13 +62,13 @@ export default function Edit() {
         };
       } else if (operation === "splitNode") {
         Transforms.splitNodes(editor, { at: path, position, match: n => Editor.isBlock(editor, n) });
-        const newPath = [...path];
-        newPath[newPath.length - 1] = newPath[newPath.length - 1] + 1;
-
-        editor.selection = {
-          anchor: { path: newPath, offset: 0 },
-          focus: { path: newPath, offset: 0 },
-        };
+        const newPath = Path.next(path);
+        setTimeout(() => {
+          Transforms.select(editor, {
+            anchor: { path: newPath, offset: 0 },
+            focus: { path: newPath, offset: 0 },
+          });
+        }, 0);
       }
 
       isRemote.current = false;
@@ -376,4 +376,13 @@ if (obj.operation === "add") {
           focus: { path: [0, 0], offset: obj.cursor },
         });
       }  
+*/
+/*
+const newPath = [...path];
+        newPath[newPath.length - 1] = newPath[newPath.length - 1] + 1;
+
+        editor.selection = {
+          anchor: { path: newPath, offset: 0 },
+          focus: { path: newPath, offset: 0 },
+        };
 */

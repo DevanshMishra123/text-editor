@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useRef, useState, useCallback } from "react";
-import { createEditor, Node, Text, Operation, Transforms } from "slate";
+import { createEditor, Node, Text, Operation, Transforms, Editor } from "slate";
 import { Slate, Editable, withReact } from "slate-react";
 import { withHistory } from "slate-history";
 import { io } from "socket.io-client";
@@ -41,7 +41,7 @@ export default function Editor() {
       console.log("📩 Received from socket:", obj);
       isRemote.current = true;
 
-      const { path, cursor, text, operation, node } = obj;
+      const { path, cursor, text, operation, node, position } = obj;
       if (operation === "add") {
         editor.selection = {
           anchor: { path, offset: cursor },

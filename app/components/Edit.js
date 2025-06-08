@@ -61,7 +61,9 @@ export default function Edit() {
           focus: { path, offset: 0 },
         };
       } else if (operation === "splitNode") {
-        Transforms.splitNodes(editor, { at: path, position, match: n => Editor.isBlock(editor, n) });
+        if (Path.isValid(editor, path)) {
+          Transforms.splitNodes(editor, { at: path, position, always: true, });
+        }
         const newPath = Path.next(path);
         setTimeout(() => {
           Transforms.select(editor, {

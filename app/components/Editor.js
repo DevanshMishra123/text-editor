@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useRef, useState, useCallback } from "react";
-import { createEditor, Node, Text, Operation } from "slate";
+import { createEditor, Node, Text, Operation, Transforms } from "slate";
 import { Slate, Editable, withReact } from "slate-react";
 import { withHistory } from "slate-history";
 import { io } from "socket.io-client";
@@ -41,7 +41,7 @@ export default function Editor() {
       console.log("📩 Received from socket:", obj);
       isRemote.current = true;
 
-      const { path, cursor, text, operation } = obj;
+      const { path, cursor, text, operation, node } = obj;
       if (operation === "add") {
         editor.selection = {
           anchor: { path, offset: cursor },
@@ -54,6 +54,12 @@ export default function Editor() {
           focus: { path, offset: cursor + text.length },
         };
         editor.deleteFragment();
+      } else if (operation === "newNode") {
+        Transforms.insertNodes(editor, node, { at: path })
+        editor.selection = {
+          anchor: { path, offset: 0 },
+          focus: { path, offset: 0 },
+        };
       }
 
       isRemote.current = false;
@@ -66,7 +72,7 @@ export default function Editor() {
     const { element, attributes, children } = props;
     switch (element.type) {
       case "heading":
-        return <h2 {...attributes}>{children}</h2>;
+        return <h2 className="text-2xl font-bold" {...attributes}>{children}</h2>;
       case "paragraph":
       default:
         return <p {...attributes}>{children}</p>;
@@ -85,6 +91,12 @@ export default function Editor() {
             text: op.text,
             operation: op.type === "insert_text" ? "add" : "delete",
           });
+        } else if (op.type === "insert_node") {
+          socketRef.current.emit("cursor-moved", {
+            path: op.path,
+            node: op.node,
+            operation: "newNode",
+          })
         }
       }
       apply(op);
@@ -94,9 +106,11 @@ export default function Editor() {
   }
 
   return (
-    <Slate editor={editor} initialValue={initialValue} value={value} onChange={setValue}>
-      <Editable renderElement={renderElement} placeholder="Start typing..." />
-    </Slate>
+    <div className="w-[75vw] h-[80vh] border-4 border-black">
+      <Slate editor={editor} initialValue={initialValue} value={value} onChange={setValue}>
+        <Editable className="w-full h-full p-4 overflow-auto outline-none" renderElement={renderElement} placeholder="Start typing..." />
+      </Slate>
+    </div>
   );
 }
 

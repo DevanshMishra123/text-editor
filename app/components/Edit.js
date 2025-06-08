@@ -106,7 +106,7 @@ export default function Edit() {
             node: op.node,
             operation: "newNode",
           })
-        } else if (op.type === "split_node") {  
+        } else if (op.type === "split_node" && op.path.length === 1) {  
           socketRef.current.emit("cursor-moved", {
             path: op.path,         
             position: op.position, 

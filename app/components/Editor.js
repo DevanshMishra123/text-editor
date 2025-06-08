@@ -60,6 +60,8 @@ export default function Editor() {
           anchor: { path, offset: 0 },
           focus: { path, offset: 0 },
         };
+      } else if (operation === "splitNode") {
+        Transforms.splitNodes(editor, { at: path, position, match: n => Editor.isBlock(editor, n) });
       }
 
       isRemote.current = false;
@@ -97,6 +99,13 @@ export default function Editor() {
             node: op.node,
             operation: "newNode",
           })
+        } else if (op.type === "split_node") {  
+          socketRef.current.emit("cursor-moved", {
+            path: op.path,         
+            position: op.position, 
+            properties: op.properties,
+            operation: "splitNode",
+          });
         }
       }
       apply(op);

@@ -29,6 +29,27 @@ export default function Edit() {
     )
   ).current;
 
+  const waitForPathAndSelect = (editor, newPath, maxAttempts = 10) => {
+    let attempts = 0;
+
+    const trySelect = () => {
+      if (Node.has(editor, newPath)) {
+        Transforms.select(editor, {
+          anchor: { path: newPath, offset: 0 },
+          focus: { path: newPath, offset: 0 },
+        });
+      } else if (attempts < maxAttempts) {
+        attempts++;
+        setTimeout(trySelect, 10); 
+      } else {
+        console.warn("❌ Could not find path to select after split:", newPath);
+      }
+    };
+
+    trySelect();
+  };
+
+
   useEffect(() => {
     const socket = io("https://text-editor-backend-nmie.onrender.com/");
     socketRef.current = socket;
@@ -63,28 +84,8 @@ export default function Edit() {
       } else if (operation === "splitNode") {
           try {
             console.log("Checking Node.has:", JSON.stringify(path), Node.has(editor, path));
-            if (Node.has(editor, path)) {
-              Transforms.select(editor, {
-                anchor: { path, offset: position },
-                focus: { path, offset: position },
-              });
-
-              Transforms.splitNodes(editor, {
-                at: path,
-                position,
-                match: n => Editor.isBlock(editor, n),
-              });
-
-              const newPath = Path.next(path);
-              setTimeout(() => {
-                Transforms.select(editor, {
-                  anchor: { path: newPath, offset: 0 },
-                  focus: { path: newPath, offset: 0 },
-                });
-              }, 0);
-            } else {
-              console.warn("❌ Invalid path for splitNode:", path);
-            }
+            const newPath = Path.next(path);           
+            waitForPathAndSelect(editor, newPath);
           } catch (err) {
             console.error("❌ Error applying splitNode remotely:", err);
           }

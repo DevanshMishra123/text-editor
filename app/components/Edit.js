@@ -62,7 +62,8 @@ export default function Edit() {
         };
       } else if (operation === "splitNode") {
           try {
-            if (Path.has(editor, path)) {
+            console.log("Checking Node.has:", JSON.stringify(path), Node.has(editor, path));
+            if (Node.has(editor, path)) {
               Transforms.select(editor, {
                 anchor: { path, offset: position },
                 focus: { path, offset: position },

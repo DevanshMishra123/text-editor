@@ -84,7 +84,15 @@ export default function Edit() {
       } else if (operation === "splitNode") {
           try {
             console.log("Checking Node.has:", JSON.stringify(path), Node.has(editor, path));
-            const newPath = Path.next(path);           
+            const newPath = Path.next(path);     
+            Transforms.insertNodes(
+              editor,
+              {
+                type: "paragraph",
+                children: [{ text: "" }],
+              },
+              { at: newPath }
+            );      
             waitForPathAndSelect(editor, newPath);
           } catch (err) {
             console.error("❌ Error applying splitNode remotely:", err);

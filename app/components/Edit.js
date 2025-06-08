@@ -62,6 +62,13 @@ export default function Edit() {
         };
       } else if (operation === "splitNode") {
         Transforms.splitNodes(editor, { at: path, position, match: n => Editor.isBlock(editor, n) });
+        const newPath = [...path];
+        newPath[newPath.length - 1] = newPath[newPath.length - 1] + 1;
+
+        editor.selection = {
+          anchor: { path: newPath, offset: 0 },
+          focus: { path: newPath, offset: 0 },
+        };
       }
 
       isRemote.current = false;

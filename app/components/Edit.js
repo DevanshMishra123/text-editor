@@ -99,7 +99,7 @@ export default function Edit() {
             const parentNode = Node.get(editor, parentPath);
             if (!parentNode || !Array.isArray(parentNode.children)) return;
             Transforms.splitNodes(editor, {
-              at: { path, cursor },
+              at: { path, offset: cursor },
             });
             const allChildren = Node.get(editor, parentPath).children;
             const moveFromIndex = childIndex + 1;
@@ -113,10 +113,11 @@ export default function Edit() {
               type: "paragraph",
               children: nodesToMove,
             };
+            const newBlockPath = Path.next(parentPath);
             Transforms.insertNodes(editor, newBlock, {
-              at: Path.next(parentPath), 
+              at: newBlockPath,
             });
-            waitForPathAndSelect(editor, parentPath);
+            waitForPathAndSelect(editor, newBlockPath);
           } catch (err) {
             console.error("❌ Error applying splitNode remotely:", err);
           }

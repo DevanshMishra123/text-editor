@@ -110,6 +110,7 @@ export default function Edit() {
     });
 
     socket.on("cursor-update", ({ userId, selection, color }) => {
+      console.log("Received from socket:", obj);
       setRemoteCursors((prev) => ({
         ...prev,
         [userId]: { ...selection.anchor, color },

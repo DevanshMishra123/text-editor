@@ -218,8 +218,8 @@ export default function Edit() {
           socketRef.current.emit("cursor-update", {
             userId: name,
             color,
-            selection: editor.selection,
-          })
+            selection: editor.selection, 
+          })       
         }
       }
       apply(op);

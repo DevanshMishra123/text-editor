@@ -103,6 +103,7 @@ export default function Edit() {
               at: { path, offset: cursor },
             });
             const allChildren = parentNode.children;
+            console.log("all children after splitting:", allChildren)
             const moveFromIndex = childIndex + 1;
             if (Array.isArray(allChildren)) {
               console.log("✅ allChildren is an array:", allChildren);

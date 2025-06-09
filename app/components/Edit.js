@@ -113,6 +113,7 @@ export default function Edit() {
     socket.on("cursor-update", ({ userId, selection, color }) => {
       const obj = { userId, selection, color };
       console.log("Received from socket:", obj);
+      if (!selection || !selection.anchor) return;
       setRemoteCursors((prev) => ({
         ...prev,
         [userId]: { ...selection.anchor, color },
@@ -211,7 +212,7 @@ export default function Edit() {
             operation: "splitNode",
           }); 
         }
-        if(editor && name!='') {
+        if(editor.selection && name!='') {
           socketRef.current.emit("cursor-update", {
             userId: name,
             color: COLORS[Math.floor(Math.random() * COLORS.length)],

@@ -112,14 +112,30 @@ export default function Edit() {
       isRemote.current = false;
     });
 
-    socket.on("cursor-update", ({ userId, selection, color }) => {
-      const obj = { userId, selection, color };
+    socket.on("cursor-update", ({ userId, selection, color, path, position, properties, operation }) => {
+      const obj = { userId, selection, color, path, position, properties, operation };
       console.log("Received from socket:", obj);
       if (!selection || !selection.anchor) return;
-      setRemoteCursors((prev) => ({
-        ...prev,
-        [userId]: { ...selection.anchor, color },
-      }));
+      if(operation === "add") {
+        const { path, offset} = selection.anchor
+        offset = offset + 1
+        setRemoteCursors((prev) => ({
+          ...prev,
+          [userId]: { path, offset, color },
+        }));
+      } else if(operation === "delete") {
+        const { path, offset} = selection.anchor
+        offset = offset - 1
+        setRemoteCursors((prev) => ({
+          ...prev,
+          [userId]: { path, offset, color },
+        }));
+      } else if(operation === "splitNode") {
+        setRemoteCursors((prev) => ({
+          ...prev,
+          [userId]: { path, offset, color },
+        }));
+      }
     });
 
     return () => socket.disconnect();
@@ -215,11 +231,29 @@ export default function Edit() {
           }); 
         }
         if(editor.selection && name!='') {
-          socketRef.current.emit("cursor-update", {
-            userId: name,
-            color,
-            selection: editor.selection, 
-          })       
+          if (op.type === "insert_text" || op.type === "remove_text") {
+            socketRef.current.emit("cursor-update", {
+              userId: name,
+              color,
+              selection: editor.selection,
+              operation: op.type === "insert_text" ? "add" : "delete",
+            });
+          } else if (op.type === "insert_node") {
+            socketRef.current.emit("cursor-update", {
+              path: op.path,
+              node: op.node,
+              operation: "newNode",
+            })
+          } else if (op.type === "split_node" && op.path.length === 1) {  
+            socketRef.current.emit("cursor-update", {
+              userId: name,
+              color,
+              path: op.path,         
+              position: op.position, 
+              properties: op.properties,
+              operation: "splitNode",
+            }); 
+          }     
         }
       }
       apply(op);

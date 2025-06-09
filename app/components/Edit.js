@@ -19,7 +19,8 @@ const initialValue = [
 export default function Edit() {
   const socketRef = useRef(null);
   const isRemote = useRef(false);
-  const name = useRef("").current
+  const name = useRef("").current;
+  const color = useRef("").current;
   const [value, setValue] = useState(initialValue);
   const [remoteCursors, setRemoteCursors] = useState({});
   const COLORS = ["#f87171", "#34d399", "#60a5fa", "#fbbf24"];
@@ -65,6 +66,7 @@ export default function Edit() {
       console.log(obj.socketId)
       const id = obj.socketId.slice(0,5) 
       name = id
+      color = COLORS[Math.floor(Math.random() * COLORS.length)]
     })
 
     socket.on("cursor-moved", (obj) => {
@@ -215,7 +217,7 @@ export default function Edit() {
         if(editor.selection && name!='') {
           socketRef.current.emit("cursor-update", {
             userId: name,
-            color: COLORS[Math.floor(Math.random() * COLORS.length)],
+            color,
             selection: editor.selection,
           })
         }

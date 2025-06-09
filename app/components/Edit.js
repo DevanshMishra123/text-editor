@@ -97,7 +97,7 @@ export default function Edit() {
             console.log("Checking Node.has:", JSON.stringify(path), Node.has(editor, path));
             const [parentPath, childIndex] = [Path.parent(path), path[path.length - 1]];
             const parentNode = Node.get(editor, parentPath);
-            console.log("parentPath:", parentPath, "parentNode:", parentNode);
+            console.log("parentPath:", parentPath, "parentNode:", parentNode,"children:", parentNode.children);
             if (!parentNode || !Array.isArray(parentNode.children)) return;
             Transforms.splitNodes(editor, {
               at: { path, offset: cursor },

@@ -211,11 +211,13 @@ export default function Edit() {
             operation: "splitNode",
           }); 
         }
-        socketRef.current.emit("cursor-update", {
-          userId: name,
-          color: COLORS[Math.floor(Math.random() * COLORS.length)],
-          selection: editor.selection,
-        })
+        if(editor && name!='') {
+          socketRef.current.emit("cursor-update", {
+            userId: name,
+            color: COLORS[Math.floor(Math.random() * COLORS.length)],
+            selection: editor.selection,
+          })
+        }
       }
       apply(op);
     };

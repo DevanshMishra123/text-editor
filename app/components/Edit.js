@@ -131,6 +131,9 @@ export default function Edit() {
           [userId]: { path, offset, color },
         }));
       } else if(operation === "splitNode") {
+        const newPath = Path.next(path);  
+        path = newPath;
+        offset = 0;
         setRemoteCursors((prev) => ({
           ...prev,
           [userId]: { path, offset, color },

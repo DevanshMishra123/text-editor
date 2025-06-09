@@ -95,16 +95,28 @@ export default function Edit() {
       } else if (operation === "splitNode") {
           try {
             console.log("Checking Node.has:", JSON.stringify(path), Node.has(editor, path));
-            const newPath = Path.next(path);     
-            Transforms.insertNodes(
-              editor,
-              {
-                type: "paragraph",
-                children: [{ text: "" }],
-              },
-              { at: newPath }
-            );      
-            waitForPathAndSelect(editor, newPath);
+            const [parentPath, childIndex] = [Path.parent(path), path[path.length - 1]];
+            const parentNode = Node.get(editor, parentPath);
+            if (!parentNode || !Array.isArray(parentNode.children)) return;
+            Transforms.splitNodes(editor, {
+              at: { path, cursor },
+            });
+            const allChildren = Node.get(editor, parentPath).children;
+            const moveFromIndex = childIndex + 1;
+            const nodesToMove = allChildren.slice(moveFromIndex);
+            for (let i = allChildren.length - 1; i >= moveFromIndex; i--) {
+              Transforms.removeNodes(editor, {
+                at: parentPath.concat(i),
+              });
+            }
+            const newBlock = {
+              type: "paragraph",
+              children: nodesToMove,
+            };
+            Transforms.insertNodes(editor, newBlock, {
+              at: Path.next(parentPath), 
+            });
+            waitForPathAndSelect(editor, parentPath);
           } catch (err) {
             console.error("❌ Error applying splitNode remotely:", err);
           }
@@ -227,7 +239,8 @@ export default function Edit() {
           })
         } else if (op.type === "split_node" && op.path.length === 1) {  
           socketRef.current.emit("cursor-moved", {
-            path: op.path,         
+            path: op.path,   
+            cursor: op.offset,      
             position: op.position, 
             properties: op.properties,
             operation: "splitNode",
@@ -529,4 +542,15 @@ const newPath = [...path];
           anchor: { path: newPath, offset: 0 },
           focus: { path: newPath, offset: 0 },
         };
+*/
+/*
+const newPath = Path.next(path);     
+            Transforms.insertNodes(
+              editor,
+              {
+                type: "paragraph",
+                children: [{ text: "" }],
+              },
+              { at: newPath }
+            );      
 */

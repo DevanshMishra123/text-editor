@@ -207,12 +207,12 @@ export default function Edit() {
             properties: op.properties,
             operation: "splitNode",
           }); 
-          socketRef.current.emit("cursor-update", {
-            userId: name,
-            color: COLORS[Math.floor(Math.random() * COLORS.length)],
-            selection: editor.selection,
-          })
         }
+        socketRef.current.emit("cursor-update", {
+          userId: name,
+          color: COLORS[Math.floor(Math.random() * COLORS.length)],
+          selection: editor.selection,
+        })
       }
       apply(op);
     };

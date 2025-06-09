@@ -20,6 +20,9 @@ export default function Edit() {
   const socketRef = useRef(null);
   const isRemote = useRef(false);
   const [value, setValue] = useState(initialValue);
+  const [name, setName] = useState("")
+  const [remoteCursors, setRemoteCursors] = useState({});
+  const COLORS = ["#f87171", "#34d399", "#60a5fa", "#fbbf24"];
 
   const editor = useRef(
     withHistory(
@@ -57,6 +60,11 @@ export default function Edit() {
     socket.on("connect", () => {
       console.log("✅ Connected to server:", socket.id);
     });
+
+    socket.on("welcome", (obj) => {
+      const id = obj.socketId.splice(0,5) 
+      setName(id)
+    })
 
     socket.on("cursor-moved", (obj) => {
       console.log("📩 Received from socket:", obj);
@@ -101,7 +109,66 @@ export default function Edit() {
       isRemote.current = false;
     });
 
+    socket.on("cursor-update", ({ userId, selection, color }) => {
+      setRemoteCursors((prev) => ({
+        ...prev,
+        [userId]: { ...selection.anchor, color },
+      }));
+    });
+
     return () => socket.disconnect();
+  }, []);
+
+  const decorate = useCallback(([node, path]) => {
+    const ranges = [];
+
+    Object.entries(remoteCursors).forEach(([id, cursor]) => {
+      if (Text.isText(node) && Path.equals(path, cursor.path)) {
+        ranges.push({
+          anchor: { path, offset: cursor.offset },
+          focus: { path, offset: cursor.offset },
+          userId: id,
+          color: cursor.color,
+          isRemoteCursor: true,
+        });
+      }
+    });
+
+    return ranges;
+  }, [remoteCursors]);
+
+  const renderLeaf = useCallback(({ attributes, children, leaf }) => {
+    if (leaf.isRemoteCursor) {
+      return (
+        <span {...attributes} style={{ position: "relative" }}>
+          <span
+            style={{
+              position: "absolute",
+              backgroundColor: leaf.color,
+              width: "2px",
+              height: "1em",
+              left: 0,
+              top: 0,
+            }}
+          />
+          <span style={{
+            position: "absolute",
+            top: "-1.2em",
+            left: 0,
+            fontSize: "0.75em",
+            backgroundColor: leaf.color,
+            color: "#fff",
+            padding: "1px 4px",
+            borderRadius: "4px",
+          }}>
+            {leaf.name}
+          </span>
+          {children}
+        </span>
+      );
+    }
+
+    return <span {...attributes}>{children}</span>;
   }, []);
 
   const renderElement = useCallback((props) => {
@@ -139,7 +206,12 @@ export default function Edit() {
             position: op.position, 
             properties: op.properties,
             operation: "splitNode",
-          });
+          }); 
+          socketRef.current.emit("cursor-update", {
+            userId: name,
+            color: COLORS[Math.floor(Math.random() * COLORS.length)],
+            selection: editor.selection,
+          })
         }
       }
       apply(op);
@@ -151,7 +223,7 @@ export default function Edit() {
   return (
     <div className="w-[75vw] h-[80vh] border-4 border-black">
       <Slate editor={editor} initialValue={initialValue} value={value} onChange={setValue}>
-        <Editable className="w-full h-full p-4 overflow-auto outline-none" renderElement={renderElement} placeholder="Start typing..." />
+        <Editable className="w-full h-full p-4 overflow-auto outline-none" renderElement={renderElement} renderLeaf={renderLeaf} decorate={decorate} placeholder="Start typing..." />
       </Slate>
     </div>
   );

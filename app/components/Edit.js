@@ -266,7 +266,8 @@ export default function Edit() {
               userId: name,
               color,
               path: op.path,         
-              position: op.position, 
+              cursor: op.offset, 
+              position: op.position,
               properties: op.properties,
               operation: "splitNode",
             }); 

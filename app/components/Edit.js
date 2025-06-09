@@ -62,7 +62,7 @@ export default function Edit() {
     });
 
     socket.on("welcome", (obj) => {
-      const id = obj.socketId.splice(0,5) 
+      const id = obj.socketId.slice(0,5) 
       setName(id)
     })
 

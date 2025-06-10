@@ -100,6 +100,10 @@ export default function Edit() {
             console.log("parentPath:", parentPath, "parentNode:", parentNode,"children:", parentNode.children);
             if (!parentNode || !Array.isArray(parentNode.children)) return;
             console.log("hello1")
+            console.log("About to split with path:", path);
+            console.log("About to split with offset:", cursor);
+            console.log("Type of path:", typeof path, Array.isArray(path));
+            console.log("Type of cursor:", typeof cursor);
             Transforms.splitNodes(editor, {
               at: { path, offset: cursor },
             });

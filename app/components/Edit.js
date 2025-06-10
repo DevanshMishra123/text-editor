@@ -99,9 +99,11 @@ export default function Edit() {
             const parentNode = Node.get(editor, parentPath);
             console.log("parentPath:", parentPath, "parentNode:", parentNode,"children:", parentNode.children);
             if (!parentNode || !Array.isArray(parentNode.children)) return;
+            console.log("hello1")
             Transforms.splitNodes(editor, {
               at: { path, offset: cursor },
             });
+            console.log("hello2")
             const allChildren = parentNode.children;
             console.log("all children after splitting:", allChildren)
             const moveFromIndex = childIndex + 1;

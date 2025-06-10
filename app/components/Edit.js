@@ -94,7 +94,7 @@ export default function Edit() {
         };
       } else if (operation === "splitNode") {
           try {
-            console.log("selection is:", editor.selection)
+            console.log("selection is:", selection)
             console.log("postion is:", position)
             const offset = selection.anchor.offset
             console.log("Checking Node.has:", JSON.stringify(path), Node.has(editor, path));

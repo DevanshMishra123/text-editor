@@ -73,7 +73,7 @@ export default function Edit() {
       console.log("📩 Received from socket:", obj);
       isRemote.current = true;
 
-      const { path, cursor, text, operation, node, position } = obj;
+      const { path, cursor, text, operation, node, position, selection } = obj;
       if (operation === "add") {
         editor.selection = {
           anchor: { path, offset: cursor },
@@ -94,6 +94,8 @@ export default function Edit() {
         };
       } else if (operation === "splitNode") {
           try {
+            const path = selection.anchor.path
+            const offset = selection.anchor.offset
             console.log("Checking Node.has:", JSON.stringify(path), Node.has(editor, path));
             const [parentPath, childIndex] = [Path.parent(path), path[path.length - 1]];
             const parentNode = Node.get(editor, parentPath);
@@ -101,11 +103,11 @@ export default function Edit() {
             if (!parentNode || !Array.isArray(parentNode.children)) return;
             console.log("hello1")
             console.log("About to split with path:", path);
-            console.log("About to split with offset:", cursor);
+            console.log("About to split with offset:", offset);
             console.log("Type of path:", typeof path, Array.isArray(path));
-            console.log("Type of cursor:", typeof cursor);
+            console.log("Type of cursor:", typeof offset);
             Transforms.splitNodes(editor, {
-              at: { path, offset: cursor },
+              at: { path, offset },
             });
             console.log("hello2")
             const allChildren = parentNode.children;
@@ -254,7 +256,7 @@ export default function Edit() {
         } else if (op.type === "split_node" && op.path.length === 1) {  
           socketRef.current.emit("cursor-moved", {
             path: op.path,   
-            cursor: op.offset,      
+            selection: editor.selection,
             position: op.position, 
             properties: op.properties,
             operation: "splitNode",

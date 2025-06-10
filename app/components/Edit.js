@@ -94,6 +94,7 @@ export default function Edit() {
         };
       } else if (operation === "splitNode") {
           try {
+            console.log("selection is:", editor.selection)
             const offset = selection.anchor.offset
             console.log("Checking Node.has:", JSON.stringify(path), Node.has(editor, path));
             const [parentPath, childIndex] = [Path.parent(path), path[path.length - 1]];

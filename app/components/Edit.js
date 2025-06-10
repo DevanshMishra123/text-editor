@@ -75,12 +75,14 @@ export default function Edit() {
 
       const { path, cursor, text, operation, node, position, selection, offset } = obj;
       if (operation === "add") {
+        console.log("cursor while adding text is:", cursor)
         editor.selection = {
           anchor: { path, offset: cursor },
           focus: { path, offset: cursor },
         };
         editor.insertText(text);
       } else if (operation === "delete") {
+        console.log("cursor while deleting text is:", cursor)
         editor.selection = {
           anchor: { path, offset: cursor },
           focus: { path, offset: cursor + text.length },
@@ -243,6 +245,7 @@ export default function Edit() {
         const currentSelection = editor.selection;
         const offset = currentSelection?.anchor?.offset ?? 0;
         if (op.type === "insert_text" || op.type === "remove_text") {
+          console.log("on local side while adding or deleting text cursor is at:", op.offset)
           socketRef.current.emit("cursor-moved", {
             path: op.path,       
             cursor: op.offset,

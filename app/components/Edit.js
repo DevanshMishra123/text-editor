@@ -73,7 +73,7 @@ export default function Edit() {
       console.log("📩 Received from socket:", obj);
       isRemote.current = true;
 
-      const { path, cursor, text, operation, node, position, selection } = obj;
+      const { path, cursor, text, operation, node, position, selection, offset } = obj;
       if (operation === "add") {
         editor.selection = {
           anchor: { path, offset: cursor },
@@ -96,7 +96,6 @@ export default function Edit() {
           try {
             console.log("selection is:", selection)
             console.log("postion is:", position)
-            const offset = selection.anchor.offset
             console.log("Checking Node.has:", JSON.stringify(path), Node.has(editor, path));
             const [parentPath, childIndex] = [Path.parent(path), path[path.length - 1]];
             const parentNode = Node.get(editor, parentPath);
@@ -241,6 +240,8 @@ export default function Edit() {
 
     editor.apply = (op) => {
       if (!isRemote.current && socketRef.current) {
+        const currentSelection = editor.selection;
+        const offset = currentSelection?.anchor?.offset ?? 0;
         if (op.type === "insert_text" || op.type === "remove_text") {
           socketRef.current.emit("cursor-moved", {
             path: op.path,       
@@ -258,6 +259,7 @@ export default function Edit() {
           socketRef.current.emit("cursor-moved", {
             path: op.path,   
             selection: editor.selection,
+            offset,
             position: op.position, 
             properties: op.properties,
             operation: "splitNode",

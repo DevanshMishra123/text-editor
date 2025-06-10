@@ -245,7 +245,7 @@ export default function Edit() {
         const currentSelection = editor.selection;
         const offset = currentSelection?.anchor?.offset ?? 0;
         if (op.type === "insert_text" || op.type === "remove_text") {
-          console.log("on local side while adding or deleting text cursor is at:", op.offset)
+          console.log("on local side while adding or deleting text cursor is at:", editor.selection.anchor.offset)
           socketRef.current.emit("cursor-moved", {
             path: op.path,       
             cursor: op.offset,
@@ -259,7 +259,7 @@ export default function Edit() {
             operation: "newNode",
           })
         } else if (op.type === "split_node" && op.path.length === 1) {  
-          console.log("on local side while adding or deleting text cursor is at:", op.offset)
+          console.log("on local side while adding or deleting text cursor is at:", editor.selection.anchor.offset)
           socketRef.current.emit("cursor-moved", {
             path: op.path,   
             selection: editor.selection,

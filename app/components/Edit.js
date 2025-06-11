@@ -221,7 +221,7 @@ export default function Edit() {
         ranges.push({
           anchor: { path, offset: cursor.offset },
           focus: { path, offset: cursor.offset },
-          userId: id,
+          name: id,
           color: cursor.color,
           isRemoteCursor: true,
         });
@@ -342,6 +342,8 @@ export default function Edit() {
             });
           } else if (op.type === "insert_node") {
             socketRef.current.emit("cursor-update", {
+              userId: name,
+              color,
               path: op.path,
               node: op.node,
               operation: "newNode",

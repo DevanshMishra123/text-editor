@@ -149,7 +149,7 @@ export default function Edit() {
           console.log("New sibling path:", newPath);
           if (Text.isText(node) && offset === node.text.length){
             const insertedNode = {
-              type: "paragraph",
+              type: parentPath.type,
               children: [{ text: "" }],
             };
             Transforms.insertNodes(editor, insertedNode, { at: newPath });

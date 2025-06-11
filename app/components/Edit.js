@@ -147,18 +147,27 @@ export default function Edit() {
           const parentPath = Path.parent(path);
           const newPath = Path.next(parentPath); 
           console.log("New sibling path:", newPath);
-          const newNode = Node.get(editor, newPath);
+          let newNode;
+          try {
+            newNode = Node.get(editor, newPath);
+          } catch {
+            newNode = null;
+          }
 
           if (!newNode) {
             const insertedNode = {
               type: "paragraph",
-              children: [{text: ""}]
-            }
-            Transforms.insertNodes(editor, insertedNode, { at: newPath })
-            editor.selection = {
-              anchor: { newPath, offset: 0 },
-              focus: { newPath, offset: 0 },
+              children: [{ text: "" }],
             };
+            Transforms.insertNodes(editor, insertedNode, { at: newPath });
+
+            editor.selection = {
+              anchor: { path: [...newPath, 0], offset: 0 },
+              focus: { path: [...newPath, 0], offset: 0 },
+            };
+
+            console.log("✅ Inserted empty node manually at:", newPath);
+            return; 
           }
 
           console.log("✅ Split successful. New node:", newNode);

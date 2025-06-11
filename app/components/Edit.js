@@ -158,6 +158,7 @@ export default function Edit() {
               children: nodesToMove,
             };
             const newBlockPath = Path.next(parentPath);
+            console.log("new Block path:", newBlockPath)
             Transforms.insertNodes(editor, newBlock, {
               at: newBlockPath,
             });

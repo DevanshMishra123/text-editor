@@ -249,7 +249,7 @@ export default function Edit() {
             position: "absolute",
             top: "-1.2em",
             left: 0,
-            fontSize: "0.75em",
+            fontSize: "1.5em",
             backgroundColor: leaf.color,
             color: "#fff",
             padding: "1px 4px",

@@ -143,9 +143,9 @@ export default function Edit() {
             waitAndShow(editor, parentNode)
             const moveFromIndex = childIndex + 1;
             if (Array.isArray(allChildren)) {
-              console.log("✅ allChildren is an array:", allChildren);
+              console.log("✅ allChildren is an array:", allChildren, allChildren.length);
             } else {
-              console.error("❌ allChildren is not an array:", allChildren, allChildren.length);
+              console.error("❌ allChildren is not an array:", allChildren);
             }
             const nodesToMove = allChildren.slice(moveFromIndex);
             for (let i = allChildren.length - 1; i >= moveFromIndex; i--) {

@@ -313,6 +313,13 @@ export default function Edit() {
             node: op.node,
             operation: "removeNode"
           })
+        } else if (op.type === "merge_node") {
+          socketRef.current.emit("cursor-moved", {
+            path: op.path,
+            position: op.position,
+            properties: op.properties,
+            operation: "mergeNode"
+          })
         }
         if(editor.selection && name!='') {
           if (op.type === "insert_text" || op.type === "remove_text") {

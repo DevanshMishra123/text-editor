@@ -270,7 +270,7 @@ export default function Edit() {
             node: op.node,
             operation: "newNode",
           })
-        } else if (op.type === "split_node" && op.path.length === 1) {  
+        } else if (op.type === "split_node" && op.path.length > 1) {  
           console.log("on local side while splitting path is:", editor.selection.anchor.path, editor.selection.focus.path)
           console.log("on local side while splitting cursor is at anchor:", editor.selection.anchor.offset)
           console.log("on local side while splitting cursor is at focus:", editor.selection.focus.offset)

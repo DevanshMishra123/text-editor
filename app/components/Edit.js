@@ -48,9 +48,9 @@ export default function Edit() {
 
     const trySelect = () => {
       if (attempts < maxAttempts) {
-        console.log("all children after splitting:", node.allChildren)
+        console.log("all children after splitting:", node.children)
         attempts++;
-        setTimeout(trySelect, 10); 
+        setTimeout(trySelect, 5); 
       } else {
         console.warn("❌ Could not split:", node);
       }

@@ -121,51 +121,31 @@ export default function Edit() {
           focus: { path, offset: 0 },
         };
       } else if (operation === "splitNode") {
-          try {
-            const offset = selection.anchor.offset
-            console.log("selection is:", selection)
-            console.log("postion is:", position)
-            console.log("Checking Node.has:", JSON.stringify(path), Node.has(editor, path));
-            const [parentPath, childIndex] = [Path.parent(path), path[path.length - 1]];
-            const parentNode = Node.get(editor, parentPath);
-            console.log("parentPath:", parentPath, "parentNode:", parentNode,"children:", parentNode.children);
-            if (!parentNode || !Array.isArray(parentNode.children)) return;
-            console.log("hello1")
-            console.log("About to split with path:", path);
-            console.log("About to split with offset:", offset);
-            console.log("Type of path:", typeof path, Array.isArray(path));
-            console.log("Type of cursor:", typeof offset);
-            Transforms.splitNodes(editor, {
-              at: { path, offset },
-            });
-            console.log("hello2")
-            const allChildren = parentNode.children;
-            waitAndShow(editor, parentNode)
-            const moveFromIndex = childIndex + 1;
-            if (Array.isArray(allChildren)) {
-              console.log("✅ allChildren is an array:", allChildren, allChildren.length);
-            } else {
-              console.error("❌ allChildren is not an array:", allChildren);
-            }
-            const nodesToMove = allChildren.slice(moveFromIndex);
-            for (let i = allChildren.length - 1; i >= moveFromIndex; i--) {
-              Transforms.removeNodes(editor, {
-                at: parentPath.concat(i),
-              });
-            }
-            const newBlock = {
-              type: "paragraph",
-              children: nodesToMove,
-            };
-            const newBlockPath = Path.next(parentPath);
-            console.log("new Block path:", newBlockPath)
-            Transforms.insertNodes(editor, newBlock, {
-              at: newBlockPath,
-            });
-            waitForPathAndSelect(editor, newBlockPath);
-          } catch (err) {
-            console.error("❌ Error applying splitNode remotely:", err);
+        try {
+          const offset = selection.anchor.offset;
+          console.log("About to split at path:", path, "offset:", offset);
+      
+          Transforms.splitNodes(editor, {
+            at: { path, offset },
+          });
+
+          const parentPath = Path.parent(path);
+          const newPath = Path.next(parentPath); 
+          console.log("New sibling path:", newPath);
+          const newNode = Node.get(editor, newPath);
+
+          if (!newNode || !Array.isArray(newNode.children)) {
+            console.warn("❌ New node is not valid or missing children");
+            return;
           }
+
+          console.log("✅ Split successful. New node:", newNode);
+
+          waitForPathAndSelect(editor, newPath);
+
+        } catch (err) {
+          console.error("❌ Error applying splitNode remotely:", err);
+        }
       }
       isRemote.current = false;
     });
@@ -606,4 +586,51 @@ const newPath = Path.next(path);
               },
               { at: newPath }
             );      
+*/
+/*
+try {
+            const offset = selection.anchor.offset
+            console.log("selection is:", selection)
+            console.log("postion is:", position)
+            console.log("Checking Node.has:", JSON.stringify(path), Node.has(editor, path));
+            const [parentPath, childIndex] = [Path.parent(path), path[path.length - 1]];
+            const parentNode = Node.get(editor, parentPath);
+            console.log("parentPath:", parentPath, "parentNode:", parentNode,"children:", parentNode.children);
+            if (!parentNode || !Array.isArray(parentNode.children)) return;
+            console.log("hello1")
+            console.log("About to split with path:", path);
+            console.log("About to split with offset:", offset);
+            console.log("Type of path:", typeof path, Array.isArray(path));
+            console.log("Type of cursor:", typeof offset);
+            Transforms.splitNodes(editor, {
+              at: { path, offset },
+            });
+            console.log("hello2")
+            const allChildren = parentNode.children;
+            waitAndShow(editor, parentNode)
+            const moveFromIndex = childIndex + 1;
+            if (Array.isArray(allChildren)) {
+              console.log("✅ allChildren is an array:", allChildren, allChildren.length);
+            } else {
+              console.error("❌ allChildren is not an array:", allChildren);
+            }
+            const nodesToMove = allChildren.slice(moveFromIndex);
+            for (let i = allChildren.length - 1; i >= moveFromIndex; i--) {
+              Transforms.removeNodes(editor, {
+                at: parentPath.concat(i),
+              });
+            }
+            const newBlock = {
+              type: "paragraph",
+              children: nodesToMove,
+            };
+            const newBlockPath = Path.next(parentPath);
+            console.log("new Block path:", newBlockPath)
+            Transforms.insertNodes(editor, newBlock, {
+              at: newBlockPath,
+            });
+            waitForPathAndSelect(editor, newBlockPath);
+          } catch (err) {
+            console.error("❌ Error applying splitNode remotely:", err);
+          }
 */

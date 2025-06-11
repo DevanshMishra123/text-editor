@@ -265,8 +265,8 @@ export default function Edit() {
             operation: "newNode",
           })
         } else if (op.type === "split_node" && op.path.length === 1) {  
-          console.log("on local side while adding or deleting text cursor is at anchor:", editor.selection.anchor.offset)
-          console.log("on local side while adding or deleting text cursor is at focus:", editor.selection.focus.offset)
+          console.log("on local side while splitting cursor is at anchor:", editor.selection.anchor.offset)
+          console.log("on local side while splitting cursor is at focus:", editor.selection.focus.offset)
           socketRef.current.emit("cursor-moved", {
             path: op.path,   
             selection: editor.selection,

@@ -133,9 +133,13 @@ export default function Edit() {
             at: { path, offset },
           });
 
-          const parentPath = Path.parent(path);
-          const newPath = Path.next(parentPath); 
-          console.log("New sibling path:", newPath);
+          const afterSplitPath = Editor.after(editor, path, { unit: 'block' })?.path;
+          console.log("New sibling path (after split):", afterSplitPath);
+
+          if (!afterSplitPath) {
+            console.warn("❌ Could not compute path after split");
+            return;
+          }
 
           waitForNodeAtPath(editor, newPath).then((newNode) => {
             if (!newNode || !Array.isArray(newNode.children)) {

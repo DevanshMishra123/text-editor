@@ -154,6 +154,8 @@ export default function Edit() {
             newNode = null;
           }
 
+          console.log("new node is:", newNode)
+
           if (!newNode) {
             const insertedNode = {
               type: "paragraph",

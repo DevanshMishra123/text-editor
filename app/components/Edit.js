@@ -42,6 +42,24 @@ export default function Edit() {
     editorRef.current = editor.selection
     console.log("value changed:", editorRef.current)
   }, [editor.selection])
+  
+  const waitAndShow = (editor, node, maxAttempts = 10) => {
+    let attempts = 0;
+
+    const trySelect = () => {
+      if (node.allChildren.length === 2) {
+        console.log("all children after splitting:", node.allChildren)
+        return
+      } else if (attempts < maxAttempts) {
+        attempts++;
+        setTimeout(trySelect, 10); 
+      } else {
+        console.warn("❌ Could not split:", node);
+      }
+    };
+
+    trySelect();
+  }
 
   const waitForPathAndSelect = (editor, newPath, maxAttempts = 10) => {
     let attempts = 0;
@@ -123,7 +141,7 @@ export default function Edit() {
             });
             console.log("hello2")
             const allChildren = parentNode.children;
-            console.log("all children after splitting:", allChildren)
+            waitAndShow(editor, parentNode)
             const moveFromIndex = childIndex + 1;
             if (Array.isArray(allChildren)) {
               console.log("✅ allChildren is an array:", allChildren);
@@ -302,7 +320,7 @@ export default function Edit() {
               userId: name,
               color,
               path: op.path,         
-              cursor: op.offset, 
+              selection: editor.selection,
               position: op.position,
               properties: op.properties,
               operation: "splitNode",

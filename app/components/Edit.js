@@ -122,6 +122,7 @@ export default function Edit() {
         };
       } else if (operation === "splitNode") {
           try {
+            const offset = selection.anchor.offset
             console.log("selection is:", selection)
             console.log("postion is:", position)
             console.log("Checking Node.has:", JSON.stringify(path), Node.has(editor, path));
@@ -293,7 +294,6 @@ export default function Edit() {
           socketRef.current.emit("cursor-moved", {
             path: op.path,   
             selection: editor.selection,
-            offset,
             position: op.position, 
             properties: op.properties,
             operation: "splitNode",

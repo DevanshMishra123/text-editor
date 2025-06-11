@@ -233,6 +233,7 @@ export default function Edit() {
 
   const renderLeaf = useCallback(({ attributes, children, leaf }) => {
     if (leaf.isRemoteCursor) {
+      console.log("name is",leaf.name)
       return (
         <span {...attributes} style={{ position: "relative" }}>
           <span

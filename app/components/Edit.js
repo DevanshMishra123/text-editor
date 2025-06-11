@@ -243,6 +243,7 @@ export default function Edit() {
               height: "1em",
               left: 0,
               top: 0,
+              zIndex: 10,
             }}
           />
           <span style={{
@@ -252,8 +253,12 @@ export default function Edit() {
             fontSize: "0.75em",
             backgroundColor: leaf.color,
             color: "#fff",
+            fontWeight: "bold",
             padding: "1px 4px",
-            borderRadius: "2px",
+            borderRadius: "4px",
+            whiteSpace: "nowrap",
+            boxShadow: "0 1px 4px rgba(0,0,0,0.2)",
+            zIndex: 20,
           }}>
             {leaf.name}
           </span>

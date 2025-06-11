@@ -42,22 +42,26 @@ export default function Edit() {
     editorRef.current = editor.selection
     console.log("value changed:", editorRef.current)
   }, [editor.selection])
-  
-  const waitAndShow = (editor, node, maxAttempts = 10) => {
-    let attempts = 0;
 
-    const trySelect = () => {
-      if (attempts < maxAttempts) {
-        console.log("all children after splitting:", node.children)
-        attempts++;
-        setTimeout(trySelect, 5); 
-      } else {
-        console.warn("❌ Could not split:", node);
-      }
-    };
+  const waitForNodeAtPath = (editor, path, maxAttempts = 10, delay = 10) => {
+    return new Promise((resolve, reject) => {
+      let attempts = 0;
 
-    trySelect();
-  }
+      const check = () => {
+        if (Node.has(editor, path)) {
+          const node = Node.get(editor, path);
+          resolve(node);
+        } else if (attempts < maxAttempts) {
+          attempts++;
+          setTimeout(check, delay);
+        } else {
+          reject(new Error("Node not found at path: " + path));
+        }
+      };
+
+      check();
+    });
+  };
 
   const waitForPathAndSelect = (editor, newPath, maxAttempts = 10) => {
     let attempts = 0;
@@ -132,16 +136,17 @@ export default function Edit() {
           const parentPath = Path.parent(path);
           const newPath = Path.next(parentPath); 
           console.log("New sibling path:", newPath);
-          const newNode = Node.get(editor, newPath);
 
-          if (!newNode || !Array.isArray(newNode.children)) {
-            console.warn("❌ New node is not valid or missing children");
-            return;
-          }
-
-          console.log("✅ Split successful. New node:", newNode);
-
-          waitForPathAndSelect(editor, newPath);
+          waitForNodeAtPath(editor, newPath).then((newNode) => {
+            if (!newNode || !Array.isArray(newNode.children)) {
+              console.warn("❌ New node is not valid or missing children");
+              return;
+            }
+            console.log("✅ Split successful. New node:", newNode);
+            waitForPathAndSelect(editor, newPath);
+          }).catch((err) => {
+            console.error("❌ Error waiting for node after split:", err);
+          });
 
         } catch (err) {
           console.error("❌ Error applying splitNode remotely:", err);

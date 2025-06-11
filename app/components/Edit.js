@@ -195,6 +195,7 @@ export default function Edit() {
       } else if(operation === "splitNode") {
         const offset = selection?.anchor?.offset
         console.log("new path and offset after splitting the text node is:", selection?.anchor?.path, selection?.anchor?.offset)
+        console.log("new Path is:", path)
         setRemoteCursors((prev) => ({
           ...prev,
           [userId]: { path, offset, color },

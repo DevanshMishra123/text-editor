@@ -145,11 +145,12 @@ export default function Edit() {
           });
 
           const parentPath = Path.parent(path);
+          const parentNode =  Node.get(editor,parentPath)
           const newPath = Path.next(parentPath); 
           console.log("New sibling path:", newPath);
           if (Text.isText(node) && offset === node.text.length){
             const insertedNode = {
-              type: parentPath.type,
+              type: parentNode.type,
               children: [{ text: "" }],
             };
             Transforms.insertNodes(editor, insertedNode, { at: newPath });

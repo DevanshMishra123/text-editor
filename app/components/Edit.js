@@ -33,6 +33,9 @@ export default function Edit() {
     )
   ).current;
 
+  console.log("updated cursor position at anchor position:", editor.selection.anchor.offset)
+  console.log("updated cursor position at focus position:", editor.selection.focus.offset)
+
   const waitForPathAndSelect = (editor, newPath, maxAttempts = 10) => {
     let attempts = 0;
 

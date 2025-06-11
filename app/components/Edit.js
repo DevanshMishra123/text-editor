@@ -147,7 +147,7 @@ export default function Edit() {
           const parentPath = Path.parent(path);
           const newPath = Path.next(parentPath); 
           console.log("New sibling path:", newPath);
-          if (offset === node.text.length){
+          if (Text.isText(node) && offset === node.text.length){
             const insertedNode = {
               type: "paragraph",
               children: [{ text: "" }],
@@ -294,10 +294,12 @@ export default function Edit() {
           console.log("on local side while splitting path is:", editor.selection.anchor.path, editor.selection.focus.path)
           console.log("on local side while splitting cursor is at anchor:", editor.selection.anchor.offset)
           console.log("on local side while splitting cursor is at focus:", editor.selection.focus.offset)
+          const node = Node.get(editor, op.path)
           socketRef.current.emit("cursor-moved", {
             path: op.path,   
             selection: editor.selection,
             position: op.position, 
+            node,
             properties: op.properties,
             operation: "splitNode",
           }); 

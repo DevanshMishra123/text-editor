@@ -195,12 +195,12 @@ export default function Edit() {
       } else if(operation === "splitNode") {
         const offset = selection?.anchor?.offset
         console.log("new path and offset after splitting the text node is:", selection?.anchor?.path, selection?.anchor?.offset)
-        console.log("new Path is:", path)
         const parentPath = Path.parent(path);
         const newPath = Path.next(parentPath); 
+        console.log("new Path is:", newPath)
         setRemoteCursors((prev) => ({
           ...prev,
-          [userId]: { path: [newPath, 0], offset, color },
+          [userId]: { path: [...newPath, 0], offset, color },
         }));
       }
     });

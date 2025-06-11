@@ -251,7 +251,9 @@ export default function Edit() {
             left: 0,
             fontSize: "0.75em",
             backgroundColor: leaf.color,
-            color: "blue",
+            color: "#fff",
+            padding: "1px 4px",
+            borderRadius: "2px",
           }}>
             {leaf.name}
           </span>

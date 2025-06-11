@@ -24,6 +24,7 @@ export default function Edit() {
   const [value, setValue] = useState(initialValue);
   const [remoteCursors, setRemoteCursors] = useState({});
   const COLORS = ["#f87171", "#34d399", "#60a5fa", "#fbbf24"];
+  const editorRef = useRef({})
 
   const editor = useRef(
     withHistory(
@@ -36,6 +37,11 @@ export default function Edit() {
   console.log("update cursor position with path:", editor.selection?.anchor.path)
   console.log("updated cursor position at anchor position:", editor.selection?.anchor.offset)
   console.log("updated cursor position at focus position:", editor.selection?.focus.offset)
+
+  useEffect(() => {
+    editorRef.current = editor.selection
+    console.log("value changed:", editorRef.current)
+  }, [editor.selection])
 
   const waitForPathAndSelect = (editor, newPath, maxAttempts = 10) => {
     let attempts = 0;

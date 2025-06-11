@@ -147,16 +147,7 @@ export default function Edit() {
           const parentPath = Path.parent(path);
           const newPath = Path.next(parentPath); 
           console.log("New sibling path:", newPath);
-          let newNode;
-          try {
-            newNode = Node.get(editor, newPath);
-          } catch {
-            newNode = null;
-          }
-
-          console.log("new node is:", newNode)
-
-          if (!newNode) {
+          if (offset === node.text.length){
             const insertedNode = {
               type: "paragraph",
               children: [{ text: "" }],
@@ -171,7 +162,7 @@ export default function Edit() {
             console.log("✅ Inserted empty node manually at:", newPath);
             return; 
           }
-
+          const newNode = Node.get(editor, newPath)
           console.log("✅ Split successful. New node:", newNode);
 
           waitForPathAndSelect(editor, newPath);

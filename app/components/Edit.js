@@ -307,6 +307,12 @@ export default function Edit() {
             properties: op.properties,
             operation: "splitNode",
           }); 
+        } else if (op.type === "remove_node") {
+          socketRef.current.emit("cursor-moved", {
+            path: op.path,
+            node: op.node,
+            operation: "removeNode"
+          })
         }
         if(editor.selection && name!='') {
           if (op.type === "insert_text" || op.type === "remove_text") {

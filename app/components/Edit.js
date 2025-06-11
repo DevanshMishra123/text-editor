@@ -145,7 +145,7 @@ export default function Edit() {
             if (Array.isArray(allChildren)) {
               console.log("✅ allChildren is an array:", allChildren);
             } else {
-              console.error("❌ allChildren is not an array:", allChildren);
+              console.error("❌ allChildren is not an array:", allChildren, allChildren.length);
             }
             const nodesToMove = allChildren.slice(moveFromIndex);
             for (let i = allChildren.length - 1; i >= moveFromIndex; i--) {

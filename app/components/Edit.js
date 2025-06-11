@@ -137,10 +137,34 @@ export default function Edit() {
         };
       } else if (operation === "splitNode") {
         try {
-          const offset = selection.anchor.offset
+          const offset = selection.anchor.offset;
+          console.log("About to split at path:", path, "offset:", offset);
+          
           Transforms.splitNodes(editor, {
             at: { path, offset },
           });
+
+          const parentPath = Path.parent(path);
+          const newPath = Path.next(parentPath); 
+          console.log("New sibling path:", newPath);
+          const newNode = Node.get(editor, newPath);
+
+          if (!newNode) {
+            const insertedNode = {
+              type: "paragraph",
+              children: [{text: ""}]
+            }
+            Transforms.insertNodes(editor, insertedNode, { at: path })
+            editor.selection = {
+              anchor: { newPath, offset: 0 },
+              focus: { newPath, offset: 0 },
+            };
+          }
+
+          console.log("✅ Split successful. New node:", newNode);
+
+          waitForPathAndSelect(editor, newPath);
+
         } catch (err) {
           console.error("❌ Error applying splitNode remotely:", err);
         }

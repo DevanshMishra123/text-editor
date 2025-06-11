@@ -154,7 +154,7 @@ export default function Edit() {
               type: "paragraph",
               children: [{text: ""}]
             }
-            Transforms.insertNodes(editor, insertedNode, { at: path })
+            Transforms.insertNodes(editor, insertedNode, { at: newPath })
             editor.selection = {
               anchor: { newPath, offset: 0 },
               focus: { newPath, offset: 0 },

@@ -148,16 +148,17 @@ export default function Edit() {
           const parentNode =  Node.get(editor,parentPath)
           const newPath = Path.next(parentPath); 
           console.log("New sibling path:", newPath);
-          if (Text.isText(node) && offset === node.text.length){
+          if (Text.isText(node) && (offset === node.text.length || offset === 0)){
+            const toInsert = offset === 0 ? path : newPath
             const insertedNode = {
               type: parentNode.type,
               children: [{ text: "" }],
             };
-            Transforms.insertNodes(editor, insertedNode, { at: newPath });
+            Transforms.insertNodes(editor, insertedNode, { at: toInsert });
 
             editor.selection = {
-              anchor: { path: [...newPath, 0], offset: 0 },
-              focus: { path: [...newPath, 0], offset: 0 },
+              anchor: { path: [...toInsert, 0], offset: 0 },
+              focus: { path: [...toInsert, 0], offset: 0 },
             };
 
             console.log("✅ Inserted empty node manually at:", newPath);

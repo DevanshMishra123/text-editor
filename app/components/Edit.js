@@ -369,9 +369,9 @@ export default function Edit() {
   }
 
   return (
-    <div className="w-[75vw] h-[80vh] border-4 border-black">
+    <div className="w-[80vw] max-w-4xl h-[80vh] mx-auto mt-10 border border-gray-300 shadow-lg rounded-xl bg-white overflow-hidden">
       <Slate editor={editor} initialValue={initialValue} value={value} onChange={setValue}>
-        <Editable className="w-full h-full p-4 overflow-auto outline-none" renderElement={renderElement} renderLeaf={renderLeaf} decorate={decorate} placeholder="Start typing..." />
+        <Editable className="w-full h-full p-6 text-base leading-relaxed focus:outline-none focus:ring-0 overflow-auto prose prose-sm sm:prose lg:prose-lg dark:prose-invert scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100" renderElement={renderElement} renderLeaf={renderLeaf} decorate={decorate} placeholder="Start typing..." />
       </Slate>
     </div>
   );

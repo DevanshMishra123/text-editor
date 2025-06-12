@@ -373,6 +373,7 @@ export default function Edit() {
             socketRef.current.emit("cursor-update", {
               userId: name,
               color,
+              selection: editor.selection,
               properties: op.properties,
               newProperties: op.newProperties,
               operation: "setSelection",

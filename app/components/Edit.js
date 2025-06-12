@@ -333,6 +333,12 @@ export default function Edit() {
             properties: op.properties,
             operation: "mergeNode"
           })
+        } else if (op.type === "set_selection") {
+          socketRef.current.emit("cursor-moved", {
+            properties: op.properties,
+            newProperties: op.newProperties,
+            operation: "setSelection"
+          })
         }
         if(editor.selection && name!='') {
           if (op.type === "insert_text" || op.type === "remove_text") {

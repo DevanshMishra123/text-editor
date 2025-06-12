@@ -207,7 +207,7 @@ export default function Edit() {
         console.log("offset after splitting node is: ", offset)
         setRemoteCursors((prev) => ({
           ...prev,
-          [userId]: { path: [...newPath, 0], offset, color },
+          [userId]: { path: [...newPath, 0], offset: 0, color },
         }));
       }
     });

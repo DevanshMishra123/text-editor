@@ -204,6 +204,7 @@ export default function Edit() {
         const parentPath = Path.parent(path);
         const newPath = Path.next(parentPath); 
         console.log("new Path is:", newPath)
+        console.log("offset after splitting node is: ", offset)
         setRemoteCursors((prev) => ({
           ...prev,
           [userId]: { path: [...newPath, 0], offset, color },

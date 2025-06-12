@@ -210,9 +210,9 @@ export default function Edit() {
           [userId]: { path: [...newPath, 0], offset: 0, color },
         }));
       } else if(operation === "setSelection") {
-        const newPath = newProperties.anchor.path;
-        const newOffset = newProperties.anchor.offset;
-        console.log("new Path is:", newPath, "and new offset is:", offset)
+        const newPath = newProperties?.anchor?.path;
+        const newOffset = newProperties?.anchor?.offset;
+        console.log("new Path is:", newPath, "and new offset is:", newOffset)
         setRemoteCursors((prev) => ({
           ...prev,
           [userId]: { path: newPath, offset: newOffset, color },

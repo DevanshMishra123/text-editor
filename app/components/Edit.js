@@ -192,7 +192,7 @@ export default function Edit() {
           [userId]: { path, offset, color },
         }));
       } else if(operation === "delete") {
-        const { path, offset} = selection.anchor
+        let { path, offset} = selection.anchor
         offset = offset - 1
         setRemoteCursors((prev) => ({
           ...prev,

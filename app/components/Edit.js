@@ -215,7 +215,7 @@ export default function Edit() {
           ...prev,
           [userId]: { path: newPath, offset: 0, color },
         }));
-      } else if(operation === "setSelection") {
+      } else if(operation === "setSelection" && newProperties?.anchor?.offset === newProperties?.focus?.offset) {
         const newPath = newProperties?.anchor?.path;
         const newOffset = newProperties?.anchor?.offset;
         console.log("new Path is:", newPath, "and new offset is:", newOffset)

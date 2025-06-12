@@ -181,7 +181,7 @@ export default function Edit() {
     });
 
     socket.on("cursor-update", ({ userId, selection, color, text, path, position, properties, newProperties, operation }) => {
-      const obj = { userId, selection, color, path, position, properties, operation };
+      const obj = { userId, selection, color, path, position, properties, newProperties, operation };
       console.log("Received from socket:", obj);
       if (!selection || !selection.anchor) return;
       if(operation === "add") {
@@ -371,9 +371,11 @@ export default function Edit() {
             }); 
           } else if (op.type === "set_selection") {
             socketRef.current.emit("cursor-update", {
+              userId: name,
+              color,
               properties: op.properties,
               newProperties: op.newProperties,
-              operation: "setSelection"
+              operation: "setSelection",
             })
           }   
         }

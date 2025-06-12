@@ -209,6 +209,11 @@ export default function Edit() {
           ...prev,
           [userId]: { path: [...newPath, 0], offset: 0, color },
         }));
+      } else if(operation === "removeNode") {
+        setRemoteCursors((prev) => ({
+          ...prev,
+          [userId]: { path, offset: 0, color },
+        }));
       } else if(operation === "setSelection") {
         const newPath = newProperties?.anchor?.path;
         const newOffset = newProperties?.anchor?.offset;
@@ -369,6 +374,25 @@ export default function Edit() {
               properties: op.properties,
               operation: "splitNode",
             }); 
+          } else if (op.type === "remove_node") {
+            socketRef.current.emit("cursor-update", {
+              userId: name,
+              color,
+              selection: editor.selection, 
+              path: op.path,
+              node: op.node,      
+              operation: "removeNode",
+            })
+          } else if (op.type === "merge_node") {
+            socketRef.current.emit("cursor-update", {
+              userId: name,
+              color,
+              selection: editor.selection,  
+              path: op.path,
+              position: op.position,
+              properties: op.properties,           
+              operation: "mergeNode",
+            })
           } else if (op.type === "set_selection") {
             socketRef.current.emit("cursor-update", {
               userId: name,

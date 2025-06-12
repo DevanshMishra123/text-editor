@@ -180,7 +180,7 @@ export default function Edit() {
       isRemote.current = false;
     });
 
-    socket.on("cursor-update", ({ userId, selection, color, text, path, position, properties, operation }) => {
+    socket.on("cursor-update", ({ userId, selection, color, text, path, position, properties, newProperties, operation }) => {
       const obj = { userId, selection, color, path, position, properties, operation };
       console.log("Received from socket:", obj);
       if (!selection || !selection.anchor) return;
@@ -208,6 +208,14 @@ export default function Edit() {
         setRemoteCursors((prev) => ({
           ...prev,
           [userId]: { path: [...newPath, 0], offset: 0, color },
+        }));
+      } else if(operation === "setSelection") {
+        const newPath = newProperties.anchor.path;
+        const newOffset = newProperties.anchor.offset;
+        console.log("new Path is:", newPath, "and new offset is:", offset)
+        setRemoteCursors((prev) => ({
+          ...prev,
+          [userId]: { path: newPath, offset: newOffset, color },
         }));
       }
     });
@@ -333,12 +341,6 @@ export default function Edit() {
             properties: op.properties,
             operation: "mergeNode"
           })
-        } else if (op.type === "set_selection") {
-          socketRef.current.emit("cursor-moved", {
-            properties: op.properties,
-            newProperties: op.newProperties,
-            operation: "setSelection"
-          })
         }
         if(editor.selection && name!='') {
           if (op.type === "insert_text" || op.type === "remove_text") {
@@ -367,7 +369,13 @@ export default function Edit() {
               properties: op.properties,
               operation: "splitNode",
             }); 
-          }     
+          } else if (op.type === "set_selection") {
+            socketRef.current.emit("cursor-update", {
+              properties: op.properties,
+              newProperties: op.newProperties,
+              operation: "setSelection"
+            })
+          }   
         }
       }
       apply(op);

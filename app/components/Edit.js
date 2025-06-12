@@ -180,13 +180,13 @@ export default function Edit() {
       isRemote.current = false;
     });
 
-    socket.on("cursor-update", ({ userId, selection, color, path, position, properties, operation }) => {
+    socket.on("cursor-update", ({ userId, selection, color, text, path, position, properties, operation }) => {
       const obj = { userId, selection, color, path, position, properties, operation };
       console.log("Received from socket:", obj);
       if (!selection || !selection.anchor) return;
       if(operation === "add") {
         const { path, offset} = selection.anchor
-        offset = offset + 1
+        offset = offset + text.length
         setRemoteCursors((prev) => ({
           ...prev,
           [userId]: { path, offset, color },
@@ -338,6 +338,7 @@ export default function Edit() {
             socketRef.current.emit("cursor-update", {
               userId: name,
               color,
+              text: op.text,
               selection: editor.selection,
               operation: op.type === "insert_text" ? "add" : "delete",
             });

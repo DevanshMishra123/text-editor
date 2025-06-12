@@ -210,9 +210,10 @@ export default function Edit() {
           [userId]: { path: [...newPath, 0], offset: 0, color },
         }));
       } else if(operation === "removeNode") {
+        const newPath = [...path, 0]
         setRemoteCursors((prev) => ({
           ...prev,
-          [userId]: { path, offset: 0, color },
+          [userId]: { path: newPath, offset: 0, color },
         }));
       } else if(operation === "setSelection") {
         const newPath = newProperties?.anchor?.path;

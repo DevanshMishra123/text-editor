@@ -157,8 +157,8 @@ export default function Edit() {
             Transforms.insertNodes(editor, insertedNode, { at: toInsert });
 
             editor.selection = {
-              anchor: { path: [...toInsert, 0], offset: 0 },
-              focus: { path: [...toInsert, 0], offset: 0 },
+              anchor: { path: [...newPath, 0], offset: 0 },
+              focus: { path: [...newPath, 0], offset: 0 },
             };
 
             console.log("✅ Inserted empty node manually at:", newPath);

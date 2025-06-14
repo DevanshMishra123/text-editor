@@ -1,5 +1,6 @@
 "use client"
 import { useState } from 'react'
+import Link from 'next/navigation'
 import { useRouter } from 'next/navigation'
 import supabase from '@/utils/supabase/client'
 
@@ -38,6 +39,7 @@ export default function Login() {
       />
       <button onClick={signIn}>Login</button>
       {error && <p style={{ color: 'red' }}>{error}</p>}
+      <span>Don't have an account?<Link href='/signup'>Create Account</Link></span>
     </div>
   )
 }

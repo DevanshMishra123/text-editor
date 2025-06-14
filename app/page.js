@@ -39,6 +39,7 @@ export default function Login() {
       />
       <button onClick={signIn}>Login</button>
       {error && <p style={{ color: 'red' }}>{error}</p>}
+      <p>Don&apos;t have an accout{' '}<Link href="signup">Create Account</Link></p>
     </div>
   )
 }

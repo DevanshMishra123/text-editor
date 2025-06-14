@@ -14,11 +14,16 @@ export default function SignUp() {
   const router = useRouter()
 
   const signUp = async () => {
+    if (!supabase || !supabase.auth || typeof supabase.auth.signUp !== 'function') {
+        console.error("Supabase or supabase.auth.signUp is not defined")
+        return
+    }
+
     const { data, error } = await supabase.auth.signUp({ email, password })
     if (error) {
-      setError(error.message)
+        setError(error.message)
     } else {
-      router.push('/login')
+        router.push('/login')
     }
   }
 

@@ -3,8 +3,18 @@ import { NextResponse } from 'next/server'
 
 export async function middleware(req) {
   try {
+    const protectedPaths = ['/dashboard', '/instruments']
     const res = NextResponse.next()
     const supabase = createMiddlewareClient({ req, res })
+
+    const {
+        data: { session },
+    } = await supabase.auth.getSession()
+
+  
+    if (!session && protectedPaths.some((path) => req.nextUrl.pathname.startsWith(path))) {
+        return NextResponse.redirect(new URL('/login', req.url))
+    }
 
     const {
       data: { user },
@@ -25,6 +35,6 @@ export async function middleware(req) {
 }
 
 export const config = {
-  matcher: ['/dashboard']
+  matcher: ['/dashboard/:path*']
 }
 

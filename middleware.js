@@ -3,13 +3,17 @@ import { NextResponse } from 'next/server'
 
 export async function middleware(req) {
   const res = NextResponse.next()
-  const supabase = createMiddlewareClient({ req, res })
+  try {
+    const supabase = createMiddlewareClient({ req, res })
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-
-  if (!user && req.nextUrl.pathname.startsWith('/')) {
+    if (!user && req.nextUrl.pathname !== '/login') {
+      return NextResponse.redirect(new URL('/login', req.url))
+    }
+  } catch (err) {
+    console.error('Middleware invocation failed:', err)
     return NextResponse.redirect(new URL('/login', req.url))
   }
 
@@ -17,5 +21,5 @@ export async function middleware(req) {
 }
 
 export const config = {
-  matcher: ['/'],
+  matcher: ['/(.*)'],
 }

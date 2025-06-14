@@ -25,22 +25,26 @@ export default function Login() {
   }
 
   return (
-    <div>
-      <h2>Login</h2>
-      <input
-        type="email"
-        placeholder="Email"
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <button onClick={signIn}>Login</button>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      <p>Don&apos;t have an accout{' '}<Link href="signup">Create Account</Link></p>
-    </div>
+    <div className='w-screen h-screen bg-black flex justify-between items-center'>
+      <div className='flex-col gap-2 bg-gray-600 text-white border border-gray-800 shadow-md'>
+        <h2>Login</h2>
+        <input 
+          type="email"
+          placeholder="Email"
+          onChange={(e) => setEmail(e.target.value)}
+          className='bg-gray-400'
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          onChange={(e) => setPassword(e.target.value)}
+          className='bg-gray-400'
+        />
+        <button className="bg-black" onClick={signIn}>Login</button>
+        {error && <p style={{ color: 'red' }}>{error}</p>}
+        <p>Don&apos;t have an accout{' '}<Link href="signup">Create Account</Link></p>
+      </div>
+    </div> 
   )
 }
 /*

@@ -25,8 +25,8 @@ export default function Login() {
   }
 
   return (
-    <div className='w-screen h-screen bg-black flex justify-between items-center'>
-      <div className='flex-col gap-2 bg-gray-600 text-white border border-gray-800 shadow-md'>
+    <div className='w-screen h-screen bg-black flex justify-center items-center'>
+      <div className='flex flex-col gap-2 bg-gray-600 text-white border border-gray-800 shadow-md'>
         <h2>Login</h2>
         <input 
           type="email"

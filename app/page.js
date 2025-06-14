@@ -1,6 +1,6 @@
 "use client"
 import dynamic from "next/dynamic";
-import { createClient } from '@/lib/supabase-server'
+import { createClient } from "@/utils/supabase/server";
 
 const Edit = dynamic(() => import("./components/Edit"), { ssr: false });
 

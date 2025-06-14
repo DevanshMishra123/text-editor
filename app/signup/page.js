@@ -19,11 +19,11 @@ export default function SignUp() {
         return
     }
 
-    const { data, error } = await supabase.auth.signUp({ email, password, options: { emailRedirectTo: 'https://text-editor-bay-zeta.vercel.app' } })
+    const { data, error } = await supabase.auth.signUp({ email, password, options: { emailRedirectTo: 'https://text-editor-bay-zeta.vercel.app/dashboard' } })
     if (error) {
         setError(error.message)
     } else {
-        router.push('/login')
+        router.push('/')
     }
   }
 

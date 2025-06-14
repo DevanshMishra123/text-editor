@@ -9,13 +9,13 @@ export async function middleware(req) {
     data: { user },
   } = await supabase.auth.getUser()
 
-  if (!user && req.nextUrl.pathname.startsWith('/')) {
-    return NextResponse.redirect(new URL('/login', req.url))
+  if (!user && req.nextUrl.pathname.startsWith('/dashboard')) {
+    return NextResponse.redirect(new URL('/', req.url))
   }
 
   return res
 }
 
 export const config = {
-  matcher: ['/', '/index']
+  matcher: ['/dashboard']
 }

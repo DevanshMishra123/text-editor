@@ -26,23 +26,23 @@ export default function Login() {
 
   return (
     <div className='w-screen h-screen bg-black flex justify-center items-center'>
-      <div className='flex flex-col gap-2 bg-gray-600 text-white border border-gray-800 shadow-md'>
-        <h2>Login</h2>
+      <div className='flex flex-col items-center gap-4 bg-gray-600 text-white border border-gray-800 p-8 bg-opacity-60 backdrop-blur-md transform transition-transform duration-500 hover:scale-105 hover:shadow-3xl shadow-md rounded-xl w-2/5'>
+        <h2 className="text-2xl font-semibold">Login</h2>
         <input 
           type="email"
           placeholder="Email"
           onChange={(e) => setEmail(e.target.value)}
-          className='bg-gray-400 p-4 rounded-2xl'
+          className='bg-gray-400 p-2 bg-opacity-50 placeholder-gray-300 focus:outline-none rounded-full w-10/12'
         />
         <input
           type="password"
           placeholder="Password"
           onChange={(e) => setPassword(e.target.value)}
-          className='bg-gray-400 p-4 rounded-2xl'
+          className='bg-gray-400 p-2 bg-opacity-50 placeholder-gray-300 focus:outline-none rounded-full w-10/12'
         />
-        <button className="bg-black" onClick={signIn}>Login</button>
+        <button className="bg-gray-900 hover:bg-gray-950 transform hover:scale-105 transition duration-200 w-1/3 font-medium rounded-full py-2 px-4" onClick={signIn}>Login</button>
         {error && <p style={{ color: 'red' }}>{error}</p>}
-        <p>Don&apos;t have an accout{' '}<Link href="signup">Create Account</Link></p>
+        <p className="text-sm mt-4">Don&apos;t have an accout{' '}<Link href="signup" className="underline text-blue-300">Create Account</Link></p>
       </div>
     </div> 
   )

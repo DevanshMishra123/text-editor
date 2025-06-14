@@ -19,7 +19,7 @@ export default function SignUp() {
         return
     }
 
-    const { data, error } = await supabase.auth.signUp({ email, password })
+    const { data, error } = await supabase.auth.signUp({ email, password, options: { emailRedirectTo: 'https://text-editor-bay-zeta.vercel.app' } })
     if (error) {
         setError(error.message)
     } else {

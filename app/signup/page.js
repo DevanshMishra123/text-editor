@@ -3,6 +3,9 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import supabase from '@/utils/supabase/client'
 
+console.log('supabase:', supabase)
+console.log('supabase.auth:', supabase.auth)
+
 export default function SignUp() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')

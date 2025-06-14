@@ -16,7 +16,18 @@ export async function middleware(req) {
         return NextResponse.redirect(new URL('/login', req.url))
     }
 
-    const {
+    return res
+  } catch (err) {
+    console.error("Middleware failed:", err)
+    return NextResponse.next() 
+  }
+}
+
+export const config = {
+  matcher: ['/dashboard/:path*','/instruments/:path*']
+}
+/*
+const {
       data: { user },
       error
     } = await supabase.auth.getUser()
@@ -26,15 +37,4 @@ export async function middleware(req) {
     if (!user && req.nextUrl.pathname.startsWith('/dashboard')) {
       return NextResponse.redirect(new URL('/', req.url))
     }
-
-    return res
-  } catch (err) {
-    console.error("Middleware failed:", err)
-    return NextResponse.next() 
-  }
-}
-
-export const config = {
-  matcher: ['/dashboard/:path*']
-}
-
+*/

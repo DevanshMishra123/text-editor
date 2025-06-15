@@ -3,16 +3,21 @@ import React from "react"
 import { useState } from "react"
 
 export default function Instruments() {
-  const [value, setValue] = useState(false)
+  const [message, setMessage] = useState('')
   const showData = async () => {
-    const res = await fetch('/api/text')
-    const data = await res.json()
+    try {
+      const res = await fetch('/api/text')
+      const data = await res.json()
+      setMessage(data.message) 
+    } catch (error) {
+      console.error("Error fetching data:", error)
+    }
   }
   
   return (
     <div>
       <button onClick={showData}></button>
-      (value && {data.message})
+      (message && <p>{message}</p>)
     </div>
   )
 }

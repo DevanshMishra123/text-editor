@@ -21,7 +21,7 @@ export default function Instruments() {
       console.log("Error signing out", error.message)
     else {
       console.log("logged out successfully")
-      window.location.href = '/login'
+      window.location.href = '/'
     }
   }
   

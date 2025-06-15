@@ -9,7 +9,7 @@ export async function middleware(req) {
 
     const {
         data: { session },
-    } = await supabase.auth.getUser()
+    } = await supabase.auth.getSession()
 
     console.log("session is:", session)
 

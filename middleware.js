@@ -9,7 +9,7 @@ export async function middleware(req) {
 
     const {
         data: { session },
-    } = await supabase.auth.getSession()
+    } = await supabase.auth.getUser()
 
   
     if (!session && protectedPaths.some((path) => req.nextUrl.pathname.startsWith(path))) {

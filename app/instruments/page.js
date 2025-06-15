@@ -1,6 +1,7 @@
 "use client"
 import React from "react"
 import { useState } from "react"
+import supabase from "@/utils/supabase/client"
 
 export default function Instruments() {
   const [message, setMessage] = useState('')
@@ -13,10 +14,21 @@ export default function Instruments() {
       console.error("Error fetching data:", error)
     }
   }
+
+  const signOut = async () => {
+    const { error } = await supabase.auth.signOut()
+    if(error)
+      console.log("Error signing out", error.message)
+    else {
+      console.log("logged out successfully")
+      window.location.href = '/login'
+    }
+  }
   
   return (
     <div>
       <button onClick={showData}>click me</button>
+      <button onClick={signOut}>sign out</button>
       {message && <p>{message}</p>}
     </div>
   )

@@ -1,4 +1,4 @@
-import { createClient } from "@/utils/supabase/server";
+
 
 export default async function Instruments() {
   const res = await fetch('/api/text')

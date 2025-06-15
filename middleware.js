@@ -1,4 +1,4 @@
-import { createMiddlewareClient } from '@supabase/ssr'
+import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs'
 import { NextResponse } from 'next/server'
 
 export async function middleware(req) {
@@ -10,6 +10,8 @@ export async function middleware(req) {
     const {
         data: { session },
     } = await supabase.auth.getUser()
+
+    console.log("session is:", session)
 
   
     if (!session && protectedPaths.some((path) => req.nextUrl.pathname.startsWith(path))) {

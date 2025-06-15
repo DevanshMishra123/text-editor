@@ -18,6 +18,7 @@ export default function Login() {
     })
 
     if (error) {
+      console.error("Login failed:", error.message);
       setError(error.message)
     } else { 
       router.push('/dashboard') 

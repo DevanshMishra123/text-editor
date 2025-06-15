@@ -1,10 +1,20 @@
 "use client"
 import React from "react"
+import { useState } from "react"
 
-export default async function Instruments() {
-  const res = await fetch('/api/text')
-  const data = await res.json()
-  return <div>{data.message}</div>
+export default function Instruments() {
+  const [value, setValue] = useState(false)
+  const showData = async () => {
+    const res = await fetch('/api/text')
+    const data = await res.json()
+  }
+  
+  return (
+    <div>
+      <button onClick={showData}></button>
+      (value && {data.message})
+    </div>
+  )
 }
 /*
 

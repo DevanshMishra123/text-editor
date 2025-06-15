@@ -16,8 +16,8 @@ export default function Instruments() {
   
   return (
     <div>
-      <button onClick={showData}></button>
-      (message && <p>{message}</p>)
+      <button onClick={showData}>click me</button>
+      {message && <p>{message}</p>}
     </div>
   )
 }

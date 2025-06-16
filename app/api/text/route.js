@@ -8,7 +8,7 @@ export async function POST(req) {
     if (!content || typeof content !== "string") 
       return NextResponse.json({ error: "Invalid content" }, { status: 400 });
     
-    const { data, error } = await supabase.from("text").update([{ content }]).eq("id", "385923bb-6c25-4c5a-8ec5-1491d41a0441").select();  
+    const { data, error } = await supabase.from("text").update([{ content }]).eq("id", "385923bb-6c25-4c5a-8ec5-1491d41a0441")
 
     if (error) 
       return NextResponse.json({ error: error.message }, { status: 500 });

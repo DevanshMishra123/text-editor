@@ -35,7 +35,7 @@ export default function Dashboard() {
       <div className="absolute inset-0 bg-white/40 backdrop-blur-sm shadow-lg p-8">
         <Edit />
       </div>
-      <button onClick={signOut}>Sign Out</button>
+      <button className="absolute top-0 left-0" onClick={signOut}>Sign Out</button>
     </div>
   );
 }

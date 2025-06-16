@@ -43,6 +43,26 @@ export default function Edit() {
     console.log("value changed:", editorRef.current)
   }, [editor.selection])
 
+  useEffect(() => {
+    const saveContent = async () => {
+      const res = await fetch('/api/text', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ content: value }), 
+      });
+
+      const data = await res.json();
+      console.log("Saved:", data);
+    };
+
+    if (value) {
+      saveContent();
+    }
+  }, [value]);
+
+
   async function waitForBlockAfter(editor, path, maxRetries = 10, delay = 30) {
     for (let i = 0; i < maxRetries; i++) {
       const after = Editor.after(editor, path, { unit: 'block' });

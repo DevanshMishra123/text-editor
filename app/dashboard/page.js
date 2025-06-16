@@ -2,20 +2,13 @@
 import supabase from "@/utils/supabase/client";
 import dynamic from "next/dynamic";
 import { useState, useEffect } from "react";
+import { useAuth } from "../ContextProvider";
 
 const Edit = dynamic(() => import("../components/Edit"), { ssr: false });
 
 export default function Dashboard() {
-  const [session, setSession] = useState(undefined)
+  const { session } = useAuth()
   console.log("session is:", session)
-
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data: {session} }) => setSession(session))
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-    });
-    return () => subscription.unsubscribe();
-  },[])
 
   const signOut = async () => {
     const { error } = await supabase.auth.signOut()

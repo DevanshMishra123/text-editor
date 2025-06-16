@@ -1,15 +1,27 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/utils/supabase/server";
+import supabase from "@/utils/supabase/client";
 
-export async function GET(req) {
+export async function POST(req) {
   try{
-    const supabase = await createClient();
-    const { data: { user }, error: userError } = await supabase.auth.getUser();
-    const { data: instruments, error } = await supabase.from("instruments").select();
+    const { content } = await request.json();
+
+    if (!content || typeof content !== "string") 
+      return NextResponse.json({ error: "Invalid content" }, { status: 400 });
+    
+    const { data, error } = await supabase.from("text").update([{ content }]).limit(1);
+
     if (error) 
-      return NextResponse.json({ message: "Failed to fetch instruments", error: error.message }, { status: 500 });
-    return NextResponse.json({message: instruments})
+      return NextResponse.json({ error: error.message }, { status: 500 });
+
+    return NextResponse.json({ message: "Content saved", data }, { status: 200 });
+    
   } catch(error){
     return NextResponse.json({ message: "Server error", error: String(error) },{status: 500})
   }
 }
+/*
+const { data: instruments, error } = await supabase.from("instruments").select();
+    if (error) 
+      return NextResponse.json({ message: "Failed to fetch instruments", error: error.message }, { status: 500 });
+    return NextResponse.json({message: instruments})
+*/

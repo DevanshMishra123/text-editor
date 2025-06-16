@@ -44,13 +44,14 @@ export default function Edit() {
   }, [editor.selection])
 
   useEffect(() => {
+    const plainText = value.map(n => Node.string(n)).join('\n'); 
     const saveContent = async () => {
       const res = await fetch('/api/text', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ content: value }), 
+        body: JSON.stringify({ content: plainText }), 
       });
 
       const data = await res.json();

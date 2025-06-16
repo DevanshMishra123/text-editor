@@ -3,7 +3,7 @@ import supabase from "@/utils/supabase/client";
 
 export async function POST(req) {
   try{
-    const { content } = await request.json();
+    const { content } = await req.json();
 
     if (!content || typeof content !== "string") 
       return NextResponse.json({ error: "Invalid content" }, { status: 400 });

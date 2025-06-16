@@ -8,7 +8,13 @@ export async function POST(req) {
     if (!content || typeof content !== "string") 
       return NextResponse.json({ error: "Invalid content" }, { status: 400 });
     
-    const { data, error } = await supabase.from("text").update([{ content }]).eq("id", "385923bb-6c25-4c5a-8ec5-1491d41a0441")
+    const { data, error } = await supabase.from("text").update([{ content }]).eq("id", "c7b1c75c-8e6f-4b61-b888-d51b65b8428b")
+
+    if (!data || data.length === 0) {
+      console.log("Row not found with that ID");
+    } else {
+      console.log("Row exists, proceed to update");
+    }
 
     if (error) 
       return NextResponse.json({ error: error.message }, { status: 500 });

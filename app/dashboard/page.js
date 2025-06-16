@@ -7,6 +7,7 @@ const Edit = dynamic(() => import("../components/Edit"), { ssr: false });
 
 export default function Dashboard() {
   const [session, setSession] = useState(undefined)
+  console.log("session is:", session)
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: {session} }) => setSession(session))

@@ -5,7 +5,7 @@ import { useEffect } from "react";
 
 const Edit = dynamic(() => import("../components/Edit"), { ssr: false });
 
-export default async function Dashboard() {
+export default function Dashboard() {
   const [session, setSession] = useState(undefined)
 
   useEffect(() => {

@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { createContext, useContext } from "react";
+import supabase from '@/utils/supabase/client';
 
 const AuthContext =  createContext()
 
@@ -9,8 +10,8 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: {session} }) => setSession(session))
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, newSession) => {
+      setSession(newSession);
     });
     return () => subscription.unsubscribe();
   },[])

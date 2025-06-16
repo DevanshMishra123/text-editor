@@ -1,7 +1,7 @@
 "use client"
 import supabase from "@/utils/supabase/client";
 import dynamic from "next/dynamic";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 
 const Edit = dynamic(() => import("../components/Edit"), { ssr: false });
 

@@ -10,6 +10,7 @@ export default function Instruments() {
       const res = await fetch('/api/text')
       const data = await res.json()
       setMessage(data.message) 
+      console.log(data.message)
     } catch (error) {
       console.error("Error fetching data:", error)
     }
@@ -29,7 +30,6 @@ export default function Instruments() {
     <div>
       <button onClick={showData}>click me</button>
       <button onClick={signOut}>sign out</button>
-      {message && <p>{message}</p>}
     </div>
   )
 }

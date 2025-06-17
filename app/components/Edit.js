@@ -92,7 +92,7 @@ export default function Edit() {
         console.log(message, "Text content is:", data.content)
         initialValue = JSON.parse(data.content)
         setValue(JSON.parse(data.content))
-        setTimeOut(() => setHasLoaded(true), 300);
+        setHasLoaded(true);
       }
       else 
         console.log("Error occured while fetching the data", error)

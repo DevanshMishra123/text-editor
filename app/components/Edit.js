@@ -43,6 +43,25 @@ export default function Edit() {
     console.log("value changed:", editorRef.current)
   }, [editor.selection])
 
+  useEffect(() => {
+    const saveContent = async () => {
+      const res = await fetch('/api/saveText', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ content: JSON.stringify(value) }), 
+      });
+
+      const data = await res.json();
+      console.log("Saved:", data);
+    };
+
+    if (value) {
+      saveContent();
+    }
+  }, [value]);
+
   const waitForPathAndSelect = (editor, newPath, maxAttempts = 10) => {
     let attempts = 0;
 
@@ -207,26 +226,6 @@ export default function Edit() {
 
     return () => socket.disconnect();
   }, []);
-
-  useEffect(() => {
-    const saveContent = async () => {
-      const res = await fetch('/api/saveText', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ content: JSON.stringify(value) }), 
-      });
-
-      const data = await res.json();
-      console.log("Saved:", data);
-    };
-
-    if (value) {
-      saveContent();
-    }
-  }, [value]);
-
 
   const decorate = useCallback(([node, path]) => {
     const ranges = [];

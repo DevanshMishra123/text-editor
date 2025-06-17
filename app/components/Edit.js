@@ -45,7 +45,7 @@ export default function Edit() {
 
   useEffect(() => {
     const saveContent = async () => {
-      const res = await fetch('/api/text', {
+      const res = await fetch('/api/saveText', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -82,8 +82,16 @@ export default function Edit() {
     trySelect();
   };
 
-
   useEffect(() => {
+    const getData = async () => {
+      const res = await fetch("/api/getText")
+      const { error, message } = await res.json()
+      if(!error)
+        setValue(message)
+      else 
+        console.log("Error occured while fetching the data", error)
+    }
+    getData()
     const socket = io("https://text-editor-backend-nmie.onrender.com/");
     socketRef.current = socket;
 

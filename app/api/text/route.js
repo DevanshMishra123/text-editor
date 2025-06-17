@@ -5,10 +5,10 @@ export async function POST(req) {
   try{
     const { content } = await req.json();
 
-    if (!content || typeof content !== "string") 
+    if (!content) 
       return NextResponse.json({ error: "Invalid content" }, { status: 400 });
     
-    const { data, error } = await supabase.from("text").update([{ content }]).eq("id", "c7b1c75c-8e6f-4b61-b888-d51b65b8428b")
+    const { data, error } = await supabase.from("text-content").update({ content }).eq("id", 1)
 
     if (!data || data.length === 0) {
       console.log("Row not found with that ID");

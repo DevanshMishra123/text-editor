@@ -37,7 +37,6 @@ export default function Edit() {
   console.log("update cursor position with path:", editor.selection?.anchor.path)
   console.log("updated cursor position at anchor position:", editor.selection?.anchor.offset)
   console.log("updated cursor position at focus position:", editor.selection?.focus.offset)
-  console.log("text content of the editor is:", value)
 
   useEffect(() => {
     editorRef.current = editor.selection
@@ -45,14 +44,13 @@ export default function Edit() {
   }, [editor.selection])
 
   useEffect(() => {
-    const plainText = value.map(n => Node.string(n)).join('\n'); 
     const saveContent = async () => {
       const res = await fetch('/api/text', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ content: plainText }), 
+        body: JSON.stringify({ content: JSON.stringify(value) }), 
       });
 
       const data = await res.json();

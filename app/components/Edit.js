@@ -22,6 +22,7 @@ export default function Edit() {
   const name = useRef("").current;
   const color = useRef("").current;
   const [value, setValue] = useState(initialValue);
+  const [hasLoaded, setHasLoaded] = useState(false);
   const [remoteCursors, setRemoteCursors] = useState({});
   const COLORS = ["#f87171", "#34d399", "#60a5fa", "#fbbf24"];
   const editorRef = useRef({})
@@ -44,6 +45,7 @@ export default function Edit() {
   }, [editor.selection])
 
   useEffect(() => {
+    if (!hasLoaded) return;
     const saveContent = async () => {
       const res = await fetch('/api/saveText', {
         method: 'POST',
@@ -88,7 +90,8 @@ export default function Edit() {
       const { error, message, data } = await res.json()
       if(!error) {
         console.log(message, "Text content is:", data.content)
-        setValue(data.content)
+        setValue(JSON.parse(data.content))
+        setHasLoaded(true);
       }
       else 
         console.log("Error occured while fetching the data", error)

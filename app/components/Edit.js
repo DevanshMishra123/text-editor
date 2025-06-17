@@ -90,6 +90,7 @@ export default function Edit() {
       const { error, message, data } = await res.json()
       if(!error) {
         console.log(message, "Text content is:", data.content)
+        initialValue = JSON.parse(data.content)
         setValue(JSON.parse(data.content))
         setTimeOut(() => setHasLoaded(true), 300);
       }

@@ -85,9 +85,11 @@ export default function Edit() {
   useEffect(() => {
     const getData = async () => {
       const res = await fetch("/api/getText")
-      const { error, message } = await res.json()
-      if(!error)
-        setValue(message)
+      const { error, message, data } = await res.json()
+      if(!error) {
+        console.log(message, "Text content is:", data)
+        setValue(data)
+      }
       else 
         console.log("Error occured while fetching the data", error)
     }

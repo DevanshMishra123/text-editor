@@ -87,8 +87,8 @@ export default function Edit() {
       const res = await fetch("/api/getText")
       const { error, message, data } = await res.json()
       if(!error) {
-        console.log(message, "Text content is:", data)
-        setValue(data)
+        console.log(message, "Text content is:", data.content)
+        setValue(data.content)
       }
       else 
         console.log("Error occured while fetching the data", error)

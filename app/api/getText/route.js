@@ -3,7 +3,7 @@ import supabase from "@/utils/supabase/client";
 
 export async function GET(req) {
   try{   
-    const { data, error } = await supabase.from("text-content").eq("id", 1).single()
+    const { data, error } = await supabase.from("text-content").select("*").eq("id", 1).single()
 
     if (error) 
       return NextResponse.json({ error: error.message }, { status: 500 });

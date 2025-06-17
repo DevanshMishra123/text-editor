@@ -62,38 +62,6 @@ export default function Edit() {
     }
   }, [value]);
 
-
-  async function waitForBlockAfter(editor, path, maxRetries = 10, delay = 30) {
-    for (let i = 0; i < maxRetries; i++) {
-      const after = Editor.after(editor, path, { unit: 'block' });
-      if (after && Node.has(editor, after.path)) {
-        return after.path;
-      }
-      await new Promise((r) => setTimeout(r, delay));
-    }
-    throw new Error("⏳ Timeout: New block node not found after split");
-  }
-
-  const waitForNodeAtPath = (editor, path, maxAttempts = 10, delay = 10) => {
-    return new Promise((resolve, reject) => {
-      let attempts = 0;
-
-      const check = () => {
-        if (Node.has(editor, path)) {
-          const node = Node.get(editor, path);
-          resolve(node);
-        } else if (attempts < maxAttempts) {
-          attempts++;
-          setTimeout(check, delay);
-        } else {
-          reject(new Error("Node not found at path: " + path));
-        }
-      };
-
-      check();
-    });
-  };
-
   const waitForPathAndSelect = (editor, newPath, maxAttempts = 10) => {
     let attempts = 0;
 
@@ -754,4 +722,39 @@ try {
           } catch (err) {
             console.error("❌ Error applying splitNode remotely:", err);
           }
+*/
+
+
+
+/*
+async function waitForBlockAfter(editor, path, maxRetries = 10, delay = 30) {
+    for (let i = 0; i < maxRetries; i++) {
+      const after = Editor.after(editor, path, { unit: 'block' });
+      if (after && Node.has(editor, after.path)) {
+        return after.path;
+      }
+      await new Promise((r) => setTimeout(r, delay));
+    }
+    throw new Error("⏳ Timeout: New block node not found after split");
+  }
+
+  const waitForNodeAtPath = (editor, path, maxAttempts = 10, delay = 10) => {
+    return new Promise((resolve, reject) => {
+      let attempts = 0;
+
+      const check = () => {
+        if (Node.has(editor, path)) {
+          const node = Node.get(editor, path);
+          resolve(node);
+        } else if (attempts < maxAttempts) {
+          attempts++;
+          setTimeout(check, delay);
+        } else {
+          reject(new Error("Node not found at path: " + path));
+        }
+      };
+
+      check();
+    });
+  };
 */

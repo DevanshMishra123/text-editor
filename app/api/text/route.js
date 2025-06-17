@@ -8,7 +8,7 @@ export async function POST(req) {
     if (!content) 
       return NextResponse.json({ error: "Invalid content" }, { status: 400 });
     
-    const { data, error } = await supabase.from("text-content").update({ content }).eq("id", 1).select()
+    const { data, error } = await supabase.from("text-content").update({ content }).eq("id", 1).single()
 
     if (!data || data.length === 0) {
       console.log("Row not found with that ID");

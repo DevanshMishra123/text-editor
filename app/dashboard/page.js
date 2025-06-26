@@ -76,7 +76,7 @@ export default function Dashboard() {
         <div className="w-1/4 flex flex-col gap-4">
           <div className="flex text-white justify-between">
             <h1>Documents</h1>
-            <button onClick={setCreateDoc(!createDoc)}>
+            <button onClick={() => setCreateDoc(prev => !prev)}>
               <FontAwesomeIcon icon={faPlus} />
             </button>
           </div>

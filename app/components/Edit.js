@@ -16,13 +16,13 @@ const initialValue = [
   },
 ];
 
-export default function Edit() {
+export default function Edit({inValue, hasLoaded}) {
   const socketRef = useRef(null);
   const isRemote = useRef(false);
   const name = useRef("").current;
   const color = useRef("").current;
-  const [value, setValue] = useState(initialValue);
-  const [hasLoaded, setHasLoaded] = useState(false);
+  const [value, setValue] = useState(inValue);
+  // const [hasLoaded, setHasLoaded] = useState(false);
   const [remoteCursors, setRemoteCursors] = useState({});
   const COLORS = ["#f87171", "#34d399", "#60a5fa", "#fbbf24"];
   const editorRef = useRef({})
@@ -86,18 +86,18 @@ export default function Edit() {
   };
 
   useEffect(() => {
-    const getData = async () => {
-      const res = await fetch("/api/getText")
-      const { error, message, data } = await res.json()
-      if(!error) {
-        console.log(message, "Text content is:", data.content)
-        setValue(JSON.parse(data.content))
-        setHasLoaded(true);
-      }
-      else 
-        console.log("Error occured while fetching the data", error)
-    }
-    getData()
+    // const getData = async () => {
+    //   const res = await fetch("/api/getText")
+    //   const { error, message, data } = await res.json()
+    //   if(!error) {
+    //     console.log(message, "Text content is:", data.content)
+    //     setValue(JSON.parse(data.content))
+    //     setHasLoaded(true);
+    //   }
+    //   else 
+    //     console.log("Error occured while fetching the data", error)
+    // }
+    // getData()
     const socket = io("https://text-editor-backend-nmie.onrender.com/");
     socketRef.current = socket;
 
@@ -416,7 +416,7 @@ export default function Edit() {
 
   return (
     <div className="dark:bg-gray-900 dark:text-white w-[80vw] max-w-4xl h-[80vh] mx-auto mt-10 border border-gray-300 shadow-lg rounded-xl bg-white overflow-hidden">
-      <Slate editor={editor} initialValue={value} onChange={setValue}>
+      <Slate editor={editor} initialValue={inValue} onChange={setValue}>
         <Editable className="w-full h-full p-6 text-base leading-relaxed focus:outline-none focus:ring-0 overflow-auto prose prose-sm sm:prose lg:prose-lg dark:prose-invert scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100" renderElement={renderElement} renderLeaf={renderLeaf} decorate={decorate} placeholder="Start typing..." />
       </Slate>
     </div>

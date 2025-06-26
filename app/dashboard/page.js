@@ -24,6 +24,7 @@ export default function Dashboard() {
   const { session } = useAuth()
   const [hasLoaded, setHasLoaded] = useState(false);
   const [inValue, setInValue] = useState(initialValue)
+  const [docName, setDocName] = useState("")
   const [docs, setDocs] = useState(["Document1"])
   const [doc, setDoc] = useState("Document1")
   const [createDoc, setCreateDoc] = useState(false)
@@ -63,6 +64,14 @@ export default function Dashboard() {
     getData()
   },[])
 
+  const newDoc = () => {
+    const arr = [...docs]
+    arr.push(docName)
+    setDocs(arr)
+    setDoc(docName)
+    setDocName("")
+  }
+
   if(!session)
     return <p>Unauthorised</p>
 
@@ -73,7 +82,11 @@ export default function Dashboard() {
         Logout
       </button>
       <div className="flex justify-between items-center">
-        <div className="w-1/4 flex flex-col gap-4 p-5">
+        <div className="w-1/4 relative flex flex-col gap-4 p-5">
+          <div className="absolute w-28 h-28 p-4 flex flex-col bg-white">
+            <input onChange={(e) => setDocName(e.target.value)} type="text" className="bg-gray-400"/>
+            <button onClick={newDoc} className="rounded hover:scale-50 hover:blactransition duration-100 bg-black text-white">Create</button>
+          </div>
           <div className="flex text-white justify-between">
             <h1>Documents</h1>
             <button onClick={() => setCreateDoc(prev => !prev)}>
@@ -81,7 +94,7 @@ export default function Dashboard() {
             </button>
           </div>
           <div>
-            {docs.map((index,element) => <div key={index} className="rounded bg-emerald-400 hover:bg-emerald-500 transition duration-100 text-white mt-4 mb-4 p-4">{element}</div>)}
+            {docs.map((element,index) => <div key={index} onClick={() => setDoc(element)} className="rounded bg-emerald-400 hover:bg-emerald-500 transition duration-100 text-white mt-4 mb-4 p-4">{element}</div>)}
           </div>
         </div>
         <div className="bg-white/40 backdrop-blur-sm shadow-lg p-8">

@@ -67,7 +67,7 @@ export default function Edit({inValue, hasLoaded}) {
       anchor: { path: [0, 0], offset: 0 },
       focus: { path: [0, 0], offset: 0 },
     });
-    Transforms.delete(editor, { at: [] });
+    Transforms.delete(editor, { at: { anchor: { path: [0, 0], offset: 0 }, focus: { path: [editor.children.length - 1, 0], offset: 0 } } });
     Transforms.insertNodes(editor, inValue); 
     setValue(inValue); 
   }, [hasLoaded, inValue]);

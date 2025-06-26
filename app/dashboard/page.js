@@ -67,8 +67,8 @@ export default function Dashboard() {
     return <p>Unauthorised</p>
 
   return (
-    <div className="flex flex-col min-h-screen justify-between bg-cover bg-center bg-no-repeat relative" style={{ backgroundImage: `url('https://images.unsplash.com/photo-1544894079-e81a9eb1da8b?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')` }}>
-      <button className="flex items-center gap-2 px-4 py-2 text-white absolute top-0 left-0" onClick={signOut}>
+    <div className="flex flex-col min-h-screen justify-between bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url('https://images.unsplash.com/photo-1544894079-e81a9eb1da8b?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')` }}>
+      <button className="flex items-center gap-2 px-4 py-2 text-white w-8" onClick={signOut}>
         <FontAwesomeIcon icon={faSignOutAlt} />
         Logout
       </button>
@@ -84,7 +84,7 @@ export default function Dashboard() {
             {docs.map((index,element) => <div key={index} className="rounded bg-emerald-400 hover:bg-emerald-500 transition duration-100 text-white m-4 p-4">{element}</div>)}
           </div>
         </div>
-        <div className="absolute inset-0 bg-white/40 backdrop-blur-sm shadow-lg p-8">
+        <div className="bg-white/40 backdrop-blur-sm shadow-lg p-8">
           <Edit inValue={inValue} hasLoaded={hasLoaded} />
         </div>
       </div>     

@@ -88,7 +88,7 @@ export default function Dashboard() {
         Logout
       </button>
       <div className="flex justify-between items-center">
-        <div className="w-1/4 relative self-start overflow-y-scroll flex flex-col gap-4 p-5">
+        <div className="w-1/4 relative self-start overflow-y-scroll scrollbar-thin scrollbar-thumb-transparent scrollbar-track-transparent hover:scrollbar-thumb-gray-500 hover:scrollbar-track-gray-200 scrollbar-thumb-rounded-full scrollbar-track-rounded-full max-h-[80vh] flex flex-col gap-4 p-5">
           {createDoc && <div className="absolute rounded top-0 right-0 w-28 h-28 p-4 flex flex-col gap-2 bg-white">
             <input onChange={(e) => setDocName(e.target.value)} type="text" className="bg-gray-400 rounded"/>
             <button onClick={newDoc} className="rounded hover:scale-50 transition duration-100 bg-black text-white">Create</button>

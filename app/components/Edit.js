@@ -8,8 +8,8 @@ import { io } from "socket.io-client";
 const initialValue = [
   {
     type: "heading",
-    children: [{text: ""}]
-  }
+    children: [{text: " "}],
+  },
 ]
 
 export default function Edit({inValue, hasLoaded}) {
@@ -41,10 +41,6 @@ export default function Edit({inValue, hasLoaded}) {
     editorRef.current = editor.selection
     console.log("value changed:", editorRef.current)
   }, [editor.selection])
-
-  useEffect(() => {
-    setValue(inValue)
-  },[inValue])
 
   useEffect(() => {
     if(value==initialValue) return

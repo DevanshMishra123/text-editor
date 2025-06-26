@@ -9,8 +9,8 @@ const Edit = dynamic(() => import("../components/Edit"), { ssr: false });
 const initialValue = [
   {
     type: "heading",
-    children: [{text: ""}]
-  }
+    children: [{text: " "}],
+  },
 ]
 
 export default function Dashboard() {

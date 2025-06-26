@@ -25,8 +25,8 @@ export default function Dashboard() {
   const [hasLoaded, setHasLoaded] = useState(false);
   const [inValue, setInValue] = useState(initialValue)
   const [docName, setDocName] = useState("")
-  const [docs, setDocs] = useState(["Document1"])
-  const [doc, setDoc] = useState("Document1")
+  const [docs, setDocs] = useState(["text-content"])
+  const [doc, setDoc] = useState("text-content")
   const [createDoc, setCreateDoc] = useState(false)
   console.log("session is:", session)
  
@@ -47,7 +47,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     const getData = async () => {
-      const res = await fetch("/api/getText")
+      const res = await fetch(`/api/getText/${doc}`)
       const { error, message, data } = await res.json()
       if(!error) {
         console.log(message, "Text content is:", data.content)
@@ -83,7 +83,7 @@ export default function Dashboard() {
         Logout
       </button>
       <div className="flex justify-between items-center">
-        <div className="w-1/4 relative self-start overflow-y-auto flex flex-col gap-4 p-5">
+        <div className="w-1/4 relative self-start overflow-y-scroll flex flex-col gap-4 p-5">
           {createDoc && <div className="absolute rounded top-0 right-0 w-28 h-28 p-4 flex flex-col gap-2 bg-white">
             <input onChange={(e) => setDocName(e.target.value)} type="text" className="bg-gray-400 rounded"/>
             <button onClick={newDoc} className="rounded hover:scale-50 transition duration-100 bg-black text-white">Create</button>

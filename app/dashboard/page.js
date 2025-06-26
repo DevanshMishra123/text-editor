@@ -2,6 +2,7 @@
 import supabase from "@/utils/supabase/client";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import dynamic from "next/dynamic";
 import { useState, useEffect } from "react";
 import { useAuth,useRef } from "../ContextProvider";
@@ -23,6 +24,9 @@ export default function Dashboard() {
   const { session } = useAuth()
   const [hasLoaded, setHasLoaded] = useState(false);
   const [inValue, setInValue] = useState(initialValue)
+  const [docs, setDocs] = useState(["Document1"])
+  const [doc, setDoc] = useState("Document1")
+  const [createDoc, setCreateDoc] = useState(false)
   console.log("session is:", session)
  
   const signOut = async () => {
@@ -63,14 +67,27 @@ export default function Dashboard() {
     return <p>Unauthorised</p>
 
   return (
-    <div className="flex min-h-screen justify-between bg-cover bg-center bg-no-repeat relative" style={{ backgroundImage: `url('https://images.unsplash.com/photo-1544894079-e81a9eb1da8b?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')` }}>
-      <div className="absolute inset-0 bg-white/40 backdrop-blur-sm shadow-lg p-8">
-        <Edit inValue={inValue} hasLoaded={hasLoaded} />
-      </div>
+    <div className="flex flex-col min-h-screen justify-between bg-cover bg-center bg-no-repeat relative" style={{ backgroundImage: `url('https://images.unsplash.com/photo-1544894079-e81a9eb1da8b?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')` }}>
       <button className="flex items-center gap-2 px-4 py-2 text-white absolute top-0 left-0" onClick={signOut}>
         <FontAwesomeIcon icon={faSignOutAlt} />
         Logout
       </button>
+      <div className="flex justify-between items-center">
+        <div className="w-1/4 flex flex-col gap-4">
+          <div className="flex text-white justify-between">
+            <h1>Documents</h1>
+            <button onClick={setCreateDoc(!createDoc)}>
+              <FontAwesomeIcon icon={faPlus} />
+            </button>
+          </div>
+          <div>
+            {docs.map((index,element) => <div className="rounded bg-emerald-400 hover:bg-emerald-500 transition duration-100 text-white m-4 p-4">{element}</div>)}
+          </div>
+        </div>
+        <div className="absolute inset-0 bg-white/40 backdrop-blur-sm shadow-lg p-8">
+          <Edit inValue={inValue} hasLoaded={hasLoaded} />
+        </div>
+      </div>     
     </div>
   );
 }

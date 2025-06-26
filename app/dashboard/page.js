@@ -40,13 +40,16 @@ export default function Dashboard() {
       const { error, message, data } = await res.json()
       if(!error) {
         console.log(message, "Text content is:", data.content)
+        let content = data.content;
+        if (typeof content === "string") 
+          content = JSON.parse(content);
         setInValue(data.content)
       }
       else 
         console.log("Error occured while fetching the data", error)
     }
     getData()
-  })
+  },[])
 
   if(!session)
     return <p>Unauthorised</p>

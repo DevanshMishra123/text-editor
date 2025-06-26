@@ -18,18 +18,25 @@ export default function Edit({inValue, hasLoaded}) {
   const name = useRef("").current;
   const color = useRef("").current;
   const [value, setValue] = useState(inValue);
+  const [editorKey, setEditorKey] = useState(0);
   // const [hasLoaded, setHasLoaded] = useState(false);
   const [remoteCursors, setRemoteCursors] = useState({});
   const COLORS = ["#f87171", "#34d399", "#60a5fa", "#fbbf24"];
   const editorRef = useRef({})
 
-  const editor = useRef(
+  // const editor = useRef(
+  //   withHistory(
+  //     withReact(
+  //       withSocket(createEditor())
+  //     )
+  //   )
+  // ).current;
+  const editor = useMemo(() => 
     withHistory(
       withReact(
         withSocket(createEditor())
       )
-    )
-  ).current;
+    ), [editorKey]);
 
   console.log("update cursor position with path:", editor.selection?.anchor.path)
   console.log("updated cursor position at anchor position:", editor.selection?.anchor.offset)
@@ -63,16 +70,12 @@ export default function Edit({inValue, hasLoaded}) {
   // }, [value]);
 
   useEffect(() => {
-    Transforms.select(editor, {
-      anchor: Editor.start(editor, []),
-      focus: Editor.end(editor, []),
-    });
-
-    Transforms.delete(editor);
-
-    Transforms.insertNodes(editor, inValue); 
-    setValue(inValue); 
+    if (hasLoaded) {
+      setValue(inValue);
+      setEditorKey(prev => prev + 1); 
+    }
   }, [hasLoaded, inValue]);
+
 
   const waitForPathAndSelect = (editor, newPath, maxAttempts = 10) => {
     let attempts = 0;
@@ -425,7 +428,7 @@ export default function Edit({inValue, hasLoaded}) {
 
   return (
     <div className="dark:bg-gray-900 dark:text-white w-[80vw] max-w-4xl h-[80vh] mx-auto mt-10 border border-gray-300 shadow-lg rounded-xl bg-white overflow-hidden">
-      <Slate editor={editor} initialValue={initialValue} value={value} onChange={setValue}>
+      <Slate editor={editor} initialValue={initialValue} value={value} onChange={setValue} key={editorKey}>
         <Editable className="w-full h-full p-6 text-base leading-relaxed focus:outline-none focus:ring-0 overflow-auto prose prose-sm sm:prose lg:prose-lg dark:prose-invert scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100" renderElement={renderElement} renderLeaf={renderLeaf} decorate={decorate} placeholder="Start typing..." />
       </Slate>
     </div>

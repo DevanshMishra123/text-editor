@@ -63,9 +63,6 @@ export default function Dashboard() {
     }
     getData()
 
-    window.addEventListener('click', () => {
-      setCreateDoc(prev => !prev)
-    })
   },[])
 
   const newDoc = () => {

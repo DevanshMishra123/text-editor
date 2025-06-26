@@ -73,7 +73,7 @@ export default function Dashboard() {
         Logout
       </button>
       <div className="flex justify-between items-center">
-        <div className="w-1/4 flex flex-col gap-4">
+        <div className="w-1/4 flex flex-col gap-4 p-5">
           <div className="flex text-white justify-between">
             <h1>Documents</h1>
             <button onClick={() => setCreateDoc(prev => !prev)}>

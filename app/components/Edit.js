@@ -63,9 +63,13 @@ export default function Edit({inValue, hasLoaded}) {
   // }, [value]);
 
   useEffect(() => {
-    if (hasLoaded) {
-      setValue(inValue);
-    }
+    Transforms.select(editor, {
+      anchor: { path: [0, 0], offset: 0 },
+      focus: { path: [0, 0], offset: 0 },
+    });
+    Transforms.delete(editor, { at: [] });
+    Transforms.insertNodes(editor, inValue); 
+    setValue(inValue); 
   }, [hasLoaded, inValue]);
 
   const waitForPathAndSelect = (editor, newPath, maxAttempts = 10) => {

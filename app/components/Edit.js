@@ -5,13 +5,6 @@ import { Slate, Editable, withReact } from "slate-react";
 import { withHistory } from "slate-history";
 import { io } from "socket.io-client";
 
-const initialValue = [
-  {
-    type: "heading",
-    children: [{text: " "}],
-  },
-]
-
 export default function Edit({inValue, hasLoaded}) {
   const socketRef = useRef(null);
   const isRemote = useRef(false);
@@ -19,18 +12,10 @@ export default function Edit({inValue, hasLoaded}) {
   const color = useRef("").current;
   const [value, setValue] = useState(inValue);
   const [editorKey, setEditorKey] = useState(0);
-  // const [hasLoaded, setHasLoaded] = useState(false);
   const [remoteCursors, setRemoteCursors] = useState({});
   const COLORS = ["#f87171", "#34d399", "#60a5fa", "#fbbf24"];
   const editorRef = useRef({})
 
-  // const editor = useRef(
-  //   withHistory(
-  //     withReact(
-  //       withSocket(createEditor())
-  //     )
-  //   )
-  // ).current;
   const editor = useMemo(() => 
     withHistory(
       withReact(
@@ -97,18 +82,6 @@ export default function Edit({inValue, hasLoaded}) {
   };
 
   useEffect(() => {
-    // const getData = async () => {
-    //   const res = await fetch("/api/getText")
-    //   const { error, message, data } = await res.json()
-    //   if(!error) {
-    //     console.log(message, "Text content is:", data.content)
-    //     setValue(JSON.parse(data.content))
-    //     setHasLoaded(true);
-    //   }
-    //   else 
-    //     console.log("Error occured while fetching the data", error)
-    // }
-    // getData()
     const socket = io("https://text-editor-backend-nmie.onrender.com/");
     socketRef.current = socket;
 
@@ -784,7 +757,13 @@ async function waitForBlockAfter(editor, path, maxRetries = 10, delay = 30) {
   };
 */
 
-
+// const editor = useRef(
+  //   withHistory(
+  //     withReact(
+  //       withSocket(createEditor())
+  //     )
+  //   )
+  // ).current;
 
 
 

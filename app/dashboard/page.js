@@ -11,6 +11,10 @@ const initialValue = [
     type: "heading",
     children: [{text: " "}],
   },
+  {
+    type: "paragraph",
+    children: [{text: " "}],
+  },
 ]
 
 export default function Dashboard() {

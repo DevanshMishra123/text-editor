@@ -63,10 +63,13 @@ export default function Edit({inValue, hasLoaded}) {
   // }, [value]);
 
   useEffect(() => {
-    Transforms.removeNodes(editor, {
-      at: [0], 
-      match: n => true, 
+    Transforms.select(editor, {
+      anchor: Editor.start(editor, []),
+      focus: Editor.end(editor, []),
     });
+
+    Transforms.delete(editor);
+
     Transforms.insertNodes(editor, inValue); 
     setValue(inValue); 
   }, [hasLoaded, inValue]);

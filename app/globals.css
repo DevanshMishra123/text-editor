@@ -24,3 +24,33 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Custom scrollbar that appears only on hover */
+.custom-scrollbar {
+  overflow-y: scroll;
+  scrollbar-width: thin; /* For Firefox */
+  scrollbar-color: transparent transparent; /* For Firefox */
+  max-height: 80vh; /* Optional: to control scroll area */
+}
+
+/* Hide scrollbar by default */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+/* Make thumb invisible by default */
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: transparent;
+  border-radius: 9999px;
+}
+
+/* Make track transparent */
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 9999px;
+}
+
+/* On hover, show the thumb */
+.custom-scrollbar:hover::-webkit-scrollbar-thumb {
+  background-color: #9ca3af; /* gray-400 */
+}

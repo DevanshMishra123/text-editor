@@ -42,7 +42,7 @@ export default function Edit({inValue, hasLoaded}) {
   }, [editor.selection])
 
   useEffect(() => {
-    if(!hasLoaded) return
+    if(value==initialValue) return
     const saveContent = async () => {
       const res = await fetch('/api/saveText', {
         method: 'POST',

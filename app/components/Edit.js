@@ -63,11 +63,10 @@ export default function Edit({inValue, hasLoaded}) {
   // }, [value]);
 
   useEffect(() => {
-    Transforms.select(editor, {
-      anchor: { path: [0, 0], offset: 0 },
-      focus: { path: [0, 0], offset: 0 },
+    Transforms.removeNodes(editor, {
+      at: [0], 
+      match: n => true, 
     });
-    Transforms.delete(editor, { at: { anchor: { path: [0, 0], offset: 0 }, focus: { path: [editor.children.length - 1, 0], offset: 0 } } });
     Transforms.insertNodes(editor, inValue); 
     setValue(inValue); 
   }, [hasLoaded, inValue]);

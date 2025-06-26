@@ -41,9 +41,11 @@ export default function Dashboard() {
       if(!error) {
         console.log(message, "Text content is:", data.content)
         let content = data.content;
-        if (typeof content === "string") 
-          content = JSON.parse(content);
-        setInValue(data.content)
+        if (typeof data.content === "string") {
+          console.log("type is:", typeof data.content)
+          content = JSON.parse(data.content);
+        }
+        setInValue(content)
       }
       else 
         console.log("Error occured while fetching the data", error)

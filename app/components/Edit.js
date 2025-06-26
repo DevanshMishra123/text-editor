@@ -241,7 +241,7 @@ export default function Edit({inValue, hasLoaded}) {
     });
 
     return () => socket.disconnect();
-  }, []);
+  }, [editorKey]);
 
   const decorate = useCallback(([node, path]) => {
     const ranges = [];

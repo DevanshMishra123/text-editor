@@ -26,31 +26,35 @@ body {
 }
 
 /* Custom scrollbar that appears only on hover */
+/* Hide scrollbar by default (Webkit browsers) */
 .custom-scrollbar {
-  overflow-y: scroll;
-  scrollbar-width: thin; /* For Firefox */
-  scrollbar-color: transparent transparent; /* For Firefox */
-  max-height: 80vh; /* Optional: to control scroll area */
+  overflow-y: auto;
+  max-height: 80vh;
 }
 
-/* Hide scrollbar by default */
 .custom-scrollbar::-webkit-scrollbar {
-  width: 6px;
+  width: 0px; /* Completely hidden */
 }
 
-/* Make thumb invisible by default */
+.custom-scrollbar:hover::-webkit-scrollbar {
+  width: 6px; /* Show scrollbar on hover */
+}
+
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: transparent;
+  background-color: transparent; /* Hidden by default */
   border-radius: 9999px;
 }
 
-/* Make track transparent */
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
-  border-radius: 9999px;
-}
-
-/* On hover, show the thumb */
 .custom-scrollbar:hover::-webkit-scrollbar-thumb {
   background-color: #9ca3af; /* gray-400 */
+}
+
+/* For Firefox - make scrollbar always thin, but it will still be visible */
+.custom-scrollbar {
+  scrollbar-width: none; /* Hide in Firefox */
+}
+
+.custom-scrollbar:hover {
+  scrollbar-width: thin; /* Show thin scrollbar on hover */
+  scrollbar-color: #9ca3af transparent; /* gray-400 thumb on transparent track */
 }

@@ -49,25 +49,25 @@ export default function Edit({inValue, hasLoaded}) {
     console.log("value changed:", editorRef.current)
   }, [editor.selection])
 
-  // useEffect(() => {
-  //   if(value==initialValue) return
-  //   const saveContent = async () => {
-  //     const res = await fetch('/api/saveText', {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify({ content: JSON.stringify(value) }), 
-  //     });
+  useEffect(() => {
+    if(editorKey==0) return
+    const saveContent = async () => {
+      const res = await fetch('/api/saveText', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ content: JSON.stringify(value) }), 
+      });
 
-  //     const data = await res.json();
-  //     console.log("Saved:", data);
-  //   };
+      const data = await res.json();
+      console.log("Saved:", data);
+    };
 
-  //   if (value) {
-  //     saveContent();
-  //   }
-  // }, [value]);
+    if (value) {
+      saveContent();
+    }
+  }, [editorKey]);
 
   useEffect(() => {
     if (hasLoaded) {
@@ -75,7 +75,6 @@ export default function Edit({inValue, hasLoaded}) {
       setEditorKey(prev => prev + 1); 
     }
   }, [hasLoaded, inValue]);
-
 
   const waitForPathAndSelect = (editor, newPath, maxAttempts = 10) => {
     let attempts = 0;

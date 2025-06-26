@@ -62,6 +62,10 @@ export default function Dashboard() {
         console.log("Error occured while fetching the data", error)
     }
     getData()
+
+    window.addEventListener('click', () => {
+      setCreateDoc(prev => !prev)
+    })
   },[])
 
   const newDoc = () => {

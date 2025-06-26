@@ -38,6 +38,7 @@ export default function Edit() {
   console.log("update cursor position with path:", editor.selection?.anchor.path)
   console.log("updated cursor position at anchor position:", editor.selection?.anchor.offset)
   console.log("updated cursor position at focus position:", editor.selection?.focus.offset)
+  console.log("new value is:", value)
 
   useEffect(() => {
     editorRef.current = editor.selection

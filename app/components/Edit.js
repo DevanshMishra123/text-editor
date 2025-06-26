@@ -67,7 +67,7 @@ export default function Edit({inValue, hasLoaded}) {
     if (value) {
       saveContent();
     }
-  }, [editorKey]);
+  }, [value]);
 
   useEffect(() => {
     if (hasLoaded) {

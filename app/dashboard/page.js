@@ -1,6 +1,7 @@
 "use client"
 import supabase from "@/utils/supabase/client";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import dynamic from "next/dynamic";
 import { useState, useEffect } from "react";
 import { useAuth,useRef } from "../ContextProvider";
@@ -66,8 +67,9 @@ export default function Dashboard() {
       <div className="absolute inset-0 bg-white/40 backdrop-blur-sm shadow-lg p-8">
         <Edit inValue={inValue} hasLoaded={hasLoaded} />
       </div>
-      <button className="absolute top-0 left-0" onClick={signOut}>
-        <FontAwesomeIcon icon="fa-solid fa-right-from-bracket" />
+      <button className="flex items-center gap-2 px-4 py-2 text-white absolute top-0 left-0" onClick={signOut}>
+        <FontAwesomeIcon icon={faSignOutAlt} />
+        Logout
       </button>
     </div>
   );

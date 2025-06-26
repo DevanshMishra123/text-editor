@@ -83,10 +83,10 @@ export default function Dashboard() {
       </button>
       <div className="flex justify-between items-center">
         <div className="w-1/4 relative flex flex-col gap-4 p-5">
-          (createDoc && <div className="absolute rounded top-0 right-0 w-28 h-28 p-4 flex flex-col gap-2 bg-white">
+          {createDoc && <div className="absolute rounded top-0 right-0 w-28 h-28 p-4 flex flex-col gap-2 bg-white">
             <input onChange={(e) => setDocName(e.target.value)} type="text" className="bg-gray-400 rounded"/>
             <button onClick={newDoc} className="rounded hover:scale-50 hover:blactransition duration-100 bg-black text-white">Create</button>
-          </div>)
+          </div>}
           <div className="flex text-white justify-between">
             <h1>Documents</h1>
             <button onClick={() => setCreateDoc(prev => !prev)}>

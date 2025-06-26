@@ -81,7 +81,7 @@ export default function Dashboard() {
             </button>
           </div>
           <div>
-            {docs.map((index,element) => <div className="rounded bg-emerald-400 hover:bg-emerald-500 transition duration-100 text-white m-4 p-4">{element}</div>)}
+            {docs.map((index,element) => <div key={index} className="rounded bg-emerald-400 hover:bg-emerald-500 transition duration-100 text-white m-4 p-4">{element}</div>)}
           </div>
         </div>
         <div className="absolute inset-0 bg-white/40 backdrop-blur-sm shadow-lg p-8">

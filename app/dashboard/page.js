@@ -93,7 +93,7 @@ export default function Dashboard() {
         <div className="w-1/4 relative self-start custom-scrollbar flex flex-col gap-4 p-5">
           <div className={`absolute rounded top-8 right-0 w-52 h-32 p-4 flex flex-col gap-2 justify-center bg-white transform transition-transform duration-300 ${createDoc ? 'scale-100' : 'scale-0'}`}>
             <input value={docName} onChange={(e) => setDocName(e.target.value)} type="text" className="bg-gray-300 rounded"/>
-            {!hasName && <p className="text-red-500">name is required</p>}
+            {!hasName && <p className="text-red-500 text-center">name is required</p>}
             <button onClick={newDoc} className="rounded hover:scale-50 transition duration-100 bg-black text-white">Create</button>
           </div>
           <div className="flex text-white justify-between">

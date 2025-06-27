@@ -67,17 +67,6 @@ export default function Dashboard() {
     getData()
   },[])
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (createDoc && boxRef.current && !boxRef.current.contains(event.target)) {
-        setCreateDoc(false);
-      }
-    };
-
-    window.addEventListener("click", handleClickOutside);
-    return () => window.removeEventListener("click", handleClickOutside);
-  }, [createDoc]) 
-
   const newDoc = () => {
     if(docName==""){
       setHasName(false)
@@ -104,7 +93,7 @@ export default function Dashboard() {
         <div className="w-1/4 relative self-start custom-scrollbar flex flex-col gap-4 p-5">
           <div 
             ref={boxRef} 
-            className={`absolute rounded top-0 right-0 w-44 h-44 p-4 flex flex-col gap-2 bg-white transform transition-transform duration-300 ${createDoc ? 'scale-100' : 'scale-0'}`}
+            className={`absolute rounded top-4 right-0 w-44 h-44 p-4 flex flex-col gap-2 bg-white transform transition-transform duration-300 ${createDoc ? 'scale-100' : 'scale-0'}`}
           >
             <input value={docName} onChange={(e) => setDocName(e.target.value)} type="text" className="bg-gray-400 rounded"/>
             {!hasName && <p className="text-red-500">name is required</p>}
@@ -128,3 +117,13 @@ export default function Dashboard() {
   );
 }
 // createDoc && <div className="absolute rounded top-0 right-0 w-36 h-36 p-4 flex flex-col gap-2 bg-white">
+// useEffect(() => {
+//     const handleClickOutside = (event) => {
+//       if (createDoc && boxRef.current && !boxRef.current.contains(event.target)) {
+//         setCreateDoc(false);
+//       }
+//     };
+
+//     window.addEventListener("click", handleClickOutside);
+//     return () => window.removeEventListener("click", handleClickOutside);
+//   }, [createDoc]) 

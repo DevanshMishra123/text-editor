@@ -91,10 +91,7 @@ export default function Dashboard() {
       </button>
       <div className="flex justify-between items-center">
         <div className="w-1/4 relative self-start custom-scrollbar flex flex-col gap-4 p-5">
-          <div 
-            ref={boxRef} 
-            className={`absolute rounded top-4 right-0 w-44 h-44 p-4 flex flex-col gap-2 bg-white transform transition-transform duration-300 ${createDoc ? 'scale-100' : 'scale-0'}`}
-          >
+          <div className={`absolute rounded top-6 right-0 w-44 h-36 p-4 flex flex-col gap-2 bg-white transform transition-transform duration-300 ${createDoc ? 'scale-100' : 'scale-0'}`}>
             <input value={docName} onChange={(e) => setDocName(e.target.value)} type="text" className="bg-gray-400 rounded"/>
             {!hasName && <p className="text-red-500">name is required</p>}
             <button onClick={newDoc} className="rounded hover:scale-50 transition duration-100 bg-black text-white">Create</button>

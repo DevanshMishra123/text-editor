@@ -103,14 +103,14 @@ export default function Dashboard() {
       </button>
       <div className="flex justify-between items-center">
         <div className="w-1/4 relative self-start custom-scrollbar flex flex-col gap-4 p-5">
-          <div ref={boxRef} className={`absolute rounded top-0 right-0 w-44 h-44 p-4 flex flex-col gap-2 bg-white transform transition-transform duration-300 ${createDoc ? 'scale-100' : 'scale-0'}`}>
+          <div onClick={(e) => e.stopPropagation()} ref={boxRef} className={`absolute rounded top-0 right-0 w-44 h-44 p-4 flex flex-col gap-2 bg-white transform transition-transform duration-300 ${createDoc ? 'scale-100' : 'scale-0'}`}>
             <input value={docName} onChange={(e) => setDocName(e.target.value)} type="text" className="bg-gray-400 rounded"/>
             {!hasName && <p className="text-red-500">name is required</p>}
             <button onClick={newDoc} className="rounded hover:scale-50 transition duration-100 bg-black text-white">Create</button>
           </div>
           <div className="flex text-white justify-between">
             <h1>Documents</h1>
-            <button onClick={() => setCreateDoc(prev => !prev)}>
+            <button onClick={() => { e.stopPropagation(); setCreateDoc(prev => !prev) }}>
               <FontAwesomeIcon icon={faPlus} />
             </button>
           </div>

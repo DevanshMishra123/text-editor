@@ -5,7 +5,7 @@ import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import dynamic from "next/dynamic";
 import { useState, useEffect } from "react";
-import { useAuth,useRef } from "../ContextProvider";
+import { useAuth, useRef } from "../ContextProvider";
 import "../globals.css";
 
 const Edit = dynamic(() => import("../components/Edit"), { ssr: false });
@@ -30,6 +30,7 @@ export default function Dashboard() {
   const [doc, setDoc] = useState("text-content")
   const [hasName, setHasName] = useState(true)
   const [createDoc, setCreateDoc] = useState(false)
+  const boxRef = useRef()
   console.log("session is:", session)
  
   const signOut = async () => {
@@ -68,12 +69,13 @@ export default function Dashboard() {
 
   useEffect(() => {
     if (createDoc) {
-      const handleClickOutside = () => setCreateDoc(prev => !prev) 
-      window.addEventListener("click", handleClickOutside)
-
-      return () => {
-        window.removeEventListener("click", handleClickOutside)
-      }
+      const handleClickOutside = (event) => {
+        if (boxRef.current && !boxRef.current.contains(event.target)) {
+          setCreateDoc(false);
+        }
+      };
+      window.addEventListener("click", handleClickOutside);
+      return () => window.removeEventListener("click", handleClickOutside);
     }
   }, [createDoc]) 
 
@@ -101,7 +103,7 @@ export default function Dashboard() {
       </button>
       <div className="flex justify-between items-center">
         <div className="w-1/4 relative self-start custom-scrollbar flex flex-col gap-4 p-5">
-          <div className={`absolute rounded top-0 right-0 w-44 h-44 p-4 flex flex-col gap-2 bg-white transform transition-transform duration-300 ${createDoc ? 'scale-100' : 'scale-0'}`}>
+          <div ref={boxRef} className={`absolute rounded top-0 right-0 w-44 h-44 p-4 flex flex-col gap-2 bg-white transform transition-transform duration-300 ${createDoc ? 'scale-100' : 'scale-0'}`}>
             <input value={docName} onChange={(e) => setDocName(e.target.value)} type="text" className="bg-gray-400 rounded"/>
             {!hasName && <p className="text-red-500">name is required</p>}
             <button onClick={newDoc} className="rounded hover:scale-50 transition duration-100 bg-black text-white">Create</button>

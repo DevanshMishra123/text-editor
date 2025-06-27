@@ -28,6 +28,7 @@ export default function Dashboard() {
   const [docName, setDocName] = useState("")
   const [docs, setDocs] = useState(["text-content"])
   const [doc, setDoc] = useState("text-content")
+  const [hasName, setHasName] = useState(true)
   const [createDoc, setCreateDoc] = useState(false)
   console.log("session is:", session)
  
@@ -72,6 +73,11 @@ export default function Dashboard() {
   },[])
 
   const newDoc = () => {
+    if(docName=""){
+      setHasName(false)
+      return
+    }
+    setHasName(true)
     const arr = [...docs]
     arr.push(docName)
     setDocs(arr)
@@ -90,10 +96,11 @@ export default function Dashboard() {
       </button>
       <div className="flex justify-between items-center">
         <div className="w-1/4 relative self-start custom-scrollbar flex flex-col gap-4 p-5">
-          {createDoc && <div className="absolute rounded top-0 right-0 w-28 h-28 p-4 flex flex-col gap-2 bg-white">
-            <input onChange={(e) => setDocName(e.target.value)} type="text" className="bg-gray-400 rounded"/>
+          <div className={`absolute rounded top-0 right-0 w-36 h-36 p-4 flex flex-col gap-2 bg-white transform transition-transform duration-300 ${createDoc ? 'scale-100' : 'scale-0'}`}>
+            <input value={docName} onChange={(e) => setDocName(e.target.value)} type="text" className="bg-gray-400 rounded"/>
+            {!hasName && <p className="text-red-500">name is required</p>}
             <button onClick={newDoc} className="rounded hover:scale-50 transition duration-100 bg-black text-white">Create</button>
-          </div>}
+          </div>
           <div className="flex text-white justify-between">
             <h1>Documents</h1>
             <button onClick={() => setCreateDoc(prev => !prev)}>
@@ -111,3 +118,4 @@ export default function Dashboard() {
     </div>
   );
 }
+// createDoc && <div className="absolute rounded top-0 right-0 w-36 h-36 p-4 flex flex-col gap-2 bg-white">

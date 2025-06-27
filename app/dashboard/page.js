@@ -68,15 +68,14 @@ export default function Dashboard() {
   },[])
 
   useEffect(() => {
-    if (createDoc) {
-      const handleClickOutside = (event) => {
-        if (boxRef.current && !boxRef.current.contains(event.target)) {
-          setCreateDoc(false);
-        }
-      };
-      window.addEventListener("click", handleClickOutside);
-      return () => window.removeEventListener("click", handleClickOutside);
-    }
+    const handleClickOutside = (event) => {
+      if (createDoc && boxRef.current && !boxRef.current.contains(event.target)) {
+        setCreateDoc(false);
+      }
+    };
+
+    window.addEventListener("click", handleClickOutside);
+    return () => window.removeEventListener("click", handleClickOutside);
   }, [createDoc]) 
 
   const newDoc = () => {

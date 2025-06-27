@@ -113,14 +113,3 @@ export default function Dashboard() {
     </div>
   );
 }
-// createDoc && <div className="absolute rounded top-0 right-0 w-36 h-36 p-4 flex flex-col gap-2 bg-white">
-// useEffect(() => {
-//     const handleClickOutside = (event) => {
-//       if (createDoc && boxRef.current && !boxRef.current.contains(event.target)) {
-//         setCreateDoc(false);
-//       }
-//     };
-
-//     window.addEventListener("click", handleClickOutside);
-//     return () => window.removeEventListener("click", handleClickOutside);
-//   }, [createDoc]) 

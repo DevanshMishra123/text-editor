@@ -4,8 +4,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import dynamic from "next/dynamic";
-import { useState, useEffect } from "react";
-import { useAuth, useRef } from "../ContextProvider";
+import { useState, useEffect, useRef } from "react";
+import { useAuth } from "../ContextProvider";
 import "../globals.css";
 
 const Edit = dynamic(() => import("../components/Edit"), { ssr: false });

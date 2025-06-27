@@ -26,7 +26,24 @@ export default function Login() {
   }
 
   return (
-    <div className='w-screen h-screen bg-black flex justify-center items-center'>
+      <div className='w-[20vw] h-[15vh] overflow-hidden border-[10px] border-gray-800 hover:scale-y-100'>
+        <div className='h-[30vh] [flex flex-col gap-4 p-4'>
+          <h1 className='text-emerald-500 font-bold '>Login</h1>
+          <input className='bg-white p-2 bg-opacity-50 placeholder-gray-300 focus:outline-none rounded-full' placeholder="Enter your email" type="email" />
+          <input className='bg-white p-2 bg-opacity-50 placeholder-gray-300 focus:outline-none rounded-full' placeholder="Enter your password" type="password" />
+        </div>
+      </div>
+  )
+}
+/*
+const supabase = createClient()
+  const { data: userData } = await supabase.auth.getUser()
+  if (!userData?.user) return <p>Unauthorized</p>
+*/
+
+
+
+{/* <div className='w-screen h-screen bg-black flex justify-center items-center'>
       <div className='flex flex-col items-center gap-4 bg-gray-600 text-white border border-gray-800 p-8 bg-opacity-60 backdrop-blur-md transform transition-transform duration-500 hover:scale-105 hover:shadow-3xl shadow-md rounded-xl w-2/5'>
         <h2 className="text-2xl font-semibold">Login</h2>
         <input 
@@ -45,11 +62,4 @@ export default function Login() {
         {error && <p style={{ color: 'red' }}>{error}</p>}
         <p className="text-sm mt-4">Don&apos;t have an accout{' '}<Link href="signup" className="underline text-blue-300">Create Account</Link></p>
       </div>
-    </div> 
-  )
-}
-/*
-const supabase = createClient()
-  const { data: userData } = await supabase.auth.getUser()
-  if (!userData?.user) return <p>Unauthorized</p>
-*/
+    </div>  */}

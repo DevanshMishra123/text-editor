@@ -73,7 +73,7 @@ export default function Dashboard() {
   },[])
 
   const newDoc = () => {
-    if(docName=""){
+    if(docName==""){
       setHasName(false)
       return
     }
